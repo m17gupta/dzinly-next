@@ -1,0 +1,44 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
+
+import { cookies } from "next/headers";
+
+async function fetchCount(path: string) {
+  try {
+    const cookieStore = await cookies();
+    const cookie = cookieStore.toString();
+    const res = await fetch(path, { cache: "no-store", headers: { cookie } });
+    if (!res.ok) return 0;
+    const data = await res.json();
+    const items = Array.isArray(data) ? data : data.items;
+    return Array.isArray(items) ? items.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+export default async function AdminIndex() {
+  const [pages, posts, products, orders, categories, tags] = await Promise.all([
+    fetchCount("/api/pages"),
+    fetchCount("/api/posts"),
+    fetchCount("/api/products"),
+    fetchCount("/api/orders"),
+    fetchCount("/api/categories"),
+    fetchCount("/api/blog_tags"),
+  ]);
+
+
+  // ];
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-semibold">Dashboard</h2>
+        <p className="text-sm text-muted-foreground">Quick overview</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,15 @@
+"use client";
+import * as React from "react";
+
+export function Avatar({ className, children }: { className?: string; children?: React.ReactNode }) {
+  return <div className={className ? className : "inline-flex items-center justify-center rounded-full bg-muted"}>{children}</div>;
+}
+
+export function AvatarImage({ src, alt, className }: { src?: string; alt?: string; className?: string }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} alt={alt || ""} className={className || "h-full w-full object-cover"} />;
+}
+
+export function AvatarFallback({ children, className }: { children?: React.ReactNode; className?: string }) {
+  return <div className={className ? className : "h-full w-full flex items-center justify-center"}>{children}</div>;
+}
