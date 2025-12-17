@@ -26,6 +26,72 @@ import {
   Globe,
   ChevronDown,
   ChevronRight,
+  Settings2, 
+  CreditCard, 
+  Activity, 
+  Blocks, 
+  Webhook, 
+  Download, 
+  ShieldCheck,
+  Users, 
+  Fingerprint, 
+  UsersRound, 
+  UserPlus, 
+  History, 
+  KeyRound,
+  ImagePlus, 
+  ScanSearch, 
+  Paintbrush, 
+  Terminal, 
+  Heart, 
+  GalleryVerticalEnd, 
+  Cpu,
+  Image as ImageIcon, 
+  Megaphone, 
+  BookOpen,  
+  TicketPercent, 
+  MailPlus, 
+  Zap,
+  ShoppingBag, 
+
+  BarChart4, 
+  ShoppingCart, 
+  RefreshCcw, 
+  ReceiptIndianRupee, // or Banknote / Percent
+  Truck, 
+ 
+  Settings,
+  Package, 
+  LayoutGrid, 
+  Award, 
+  Layers, 
+  ListTree, 
+
+  Hash, 
+  Component, 
+  Boxes, 
+  CircleDollarSign,
+  Briefcase, 
+  Image, 
+
+  SwatchBook,
+
+
+  BarChart3, 
+
+  HeartPulse, 
+
+  FileCode2, 
+  Newspaper, 
+
+  PanelTop, 
+  PanelBottom, 
+  Compass, 
+  ClipboardList, 
+  ArrowLeftRight, 
+
+
+
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -124,146 +190,378 @@ const currentWebsiteSections: NavSection[] = [
     id: "dashboard-overview",
     label: "Overview",
     items: [
-      { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-      { label: "Analytics", href: "/admin/analytics", icon: FileText, permission: "websites:update" },
-      { label: "Activity Log", href: "/admin/activity", icon: Images, permission: "analytics:view" },
-      { label: "Notifications", href: "/admin/notifications", icon: RectangleHorizontal, permission: "security:read" },
-      { label: "System Health", href: "/admin/health", icon: RectangleVertical, permission: "security:read" },
-      { label: "Quick Actions", href: "/admin/quick-actions", icon: Navigation, permission: "security:read" },
+      { label: "Dashboard", href: "/admin/pages", icon: LayoutDashboard },
+      { label: "Analytics", href: "/admin/posts", icon: BarChart3, permission: "websites:update" },
+      { label: "Activity Log", href: "/admin/media", icon: Activity, permission: "analytics:view" },
+      { label: "Notifications", href: "/admin/header", icon: Bell, permission: "security:read" },
+      { label: "System Health", href: "/admin/footer", icon: HeartPulse, permission: "security:read" },
+      { label: "Quick Actions", href: "/admin/navigation", icon: Zap, permission: "security:read" },
     ],
-  },
+},
 
-
-  {
+{
     id: "websites",
     label: "Websites",
     items: [
-      { label: "Pages", href: "/admin/pages", icon: LayoutDashboard },
-      { label: "Posts", href: "/admin/posts", icon: FileText, permission: "websites:update" },
-      { label: "Media", href: "/admin/media", icon: Images, permission: "analytics:view" },
-      { label: "Header", href: "/admin/header", icon: RectangleHorizontal, permission: "security:read" },
-      { label: "Footer", href: "/admin/footer", icon: RectangleVertical, permission: "security:read" },
-      { label: "Navigation", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
-      { label: "Forms", href: "/admin/forms", icon: Navigation, permission: "security:read" },
-      { label: "Redirects", href: "/admin/redirects", icon: Navigation, permission: "security:read" },
-      { label: "Domain Settings", href: "/admin/domain", icon: Navigation, permission: "security:read" },
-
-
+      { label: "Pages", href: "/admin/pages", icon: FileCode2 },
+      { label: "Posts", href: "/admin/posts", icon: Newspaper, permission: "websites:update" },
+      { label: "Media", href: "/admin/media", icon: ImageIcon, permission: "analytics:view" },
+      { label: "Header", href: "/admin/header", icon: PanelTop, permission: "security:read" },
+      { label: "Footer", href: "/admin/footer", icon: PanelBottom, permission: "security:read" },
+      { label: "Navigation", href: "/admin/navigation", icon: Compass, permission: "security:read" },
+      { label: "Forms", href: "/admin/forms", icon: ClipboardList, permission: "security:read" },
+      { label: "Redirects", href: "/admin/redirects", icon: ArrowLeftRight, permission: "security:read" },
+      { label: "Domain Settings", href: "/admin/domains", icon: Globe2, permission: "security:read" },
     ],
-  },
+},
 
 
-  {
+ {
     id: "branding",
     label: "Branding & Design",
     items: [
-      { label: "Brand Profile", href: "/admin/branding/brand-profile", icon: BadgeCent, permission: ["content:read", "content:update", "content:delete"]  },
-      { label: "Logo", href: "/admin/branding/logo", icon: BadgeCent, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Colors", href: "/admin/branding/colors", icon: Palette, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Typography", href: "/admin/branding/typography", icon: Type, permission: ["content:read", "content:update", "content:delete"]  },
-      { label: "Layout Settings", href: "/admin/branding/layout-settings", icon: LayoutTemplate, permission: ["content:read", "content:update", "content:delete"]  },
-      { label: "Theme Presets", href: "/admin/branding/theme-presets", icon: LayoutTemplate, permission: ["content:read", "content:update", "content:delete"]  },
+      { 
+        label: "Brand Profile", 
+        href: "/admin/branding/brand-profile", 
+        icon: Briefcase, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Logo", 
+        href: "/admin/branding/logo", 
+        icon: Image, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Colors", 
+        href: "/admin/branding/colors", 
+        icon: Palette, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Typography", 
+        href: "/admin/branding/typography", 
+        icon: Type, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Layout Settings", 
+        href: "/admin/branding/layout-settings", 
+        icon: LayoutTemplate, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Theme Presets", 
+        href: "/admin/branding/theme-presets", 
+        icon: SwatchBook, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
     ],
-  },
+},
 
 
   {
     id: "products",
     label: "Products",
     items: [
-      { label: "Products", href: "/admin/products", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Category", href: "/admin/category", icon: Tags, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Brand", href: "/admin/brand", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Segment", href: "/admin/segment", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      // { label: "Attribute", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Styles", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Tags", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Attributes", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Variants", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Pricing Rules", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-
+      { 
+        label: "Products", 
+        href: "/admin/products", 
+        icon: Package, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Category", 
+        href: "/admin/category", 
+        icon: LayoutGrid, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Brand", 
+        href: "/admin/brand", 
+        icon: Award, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Segment", 
+        href: "/admin/segment", 
+        icon: Layers, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Attribute", 
+        href: "/admin/attribute", 
+        icon: ListTree, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Styles", 
+        href: "/admin/styles", 
+        icon: Palette, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Tags", 
+        href: "/admin/tags", 
+        icon: Hash, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Attributes", 
+        href: "/admin/attributes-list", 
+        icon: Component, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Variants", 
+        href: "/admin/variants", 
+        icon: Boxes, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Pricing Rules", 
+        href: "/admin/pricing-rules", 
+        icon: CircleDollarSign, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
     ],
-  },
+},
 
-   {
+  {
     id: "ecommerce",
     label: "E-Commerce",
     items: [
-      { label: "Orders", href: "/admin/ecommerce/orders", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Customers", href: "/admin/ecommerce/customers", icon: Tags, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Reports", href: "/admin/ecommerce/reports", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Abandoned Carts", href: "/admin/ecommerce/abandoned-carts", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Subscriptions", href: "/admin/ecommerce/subscriptions", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Taxes", href: "/admin/ecommerce/taxes", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Shipping", href: "/admin/ecommerce/shipping", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Payments", href: "/admin/ecommerce/payments", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Invoices", href: "/admin/ecommerce/invoices", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Settings", href: "/admin/ecommerce/settings", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
+      { 
+        label: "Orders", 
+        href: "/admin/ecommerce/orders", 
+        icon: ShoppingBag, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Customers", 
+        href: "/admin/ecommerce/customers", 
+        icon: Users, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Reports", 
+        href: "/admin/ecommerce/reports", 
+        icon: BarChart4, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Abandoned Carts", 
+        href: "/admin/ecommerce/abandoned-carts", 
+        icon: ShoppingCart, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Subscriptions", 
+        href: "/admin/ecommerce/subscriptions", 
+        icon: RefreshCcw, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Taxes", 
+        href: "/admin/ecommerce/taxes", 
+        icon: ReceiptIndianRupee, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Shipping", 
+        href: "/admin/ecommerce/shipping", 
+        icon: Truck, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Payments", 
+        href: "/admin/ecommerce/payments", 
+        icon: CreditCard, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Invoices", 
+        href: "/admin/ecommerce/invoices", 
+        icon: FileText, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Settings", 
+        href: "/admin/ecommerce/settings", 
+        icon: Settings, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
     ],
-  },
+},
 
 
    {
     id: "marketing",
     label: "Marketing",
     items: [
-      { label: "Banners", href: "/admin/marketing/banners", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Campaigns", href: "/admin/marketing/campaigns", icon: Tags, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Catalog Generation", href: "/admin/marketing/catalog-generation", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Quotations", href: "/admin/marketing/quotations", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Coupons", href: "/admin/marketing/coupons", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Email Templates", href: "/admin/marketing/email-templates", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Integrations", href: "/admin/marketing/integrations", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Automation Rules", href: "/admin/marketing/automation-rules", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
+      { 
+        label: "Banners", 
+        href: "/admin/marketing/banners", 
+        icon: ImageIcon, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Campaigns", 
+        href: "/admin/marketing/campaigns", 
+        icon: Megaphone, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Catalog Generation", 
+        href: "/admin/marketing/catalog-generation", 
+        icon: BookOpen, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Quotations", 
+        href: "/admin/marketing/quotations", 
+        icon: FileText, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Coupons", 
+        href: "/admin/marketing/coupons", 
+        icon: TicketPercent, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Email Templates", 
+        href: "/admin/marketing/email-templates", 
+        icon: MailPlus, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Integrations", 
+        href: "/admin/marketing/integrations", 
+        icon: Share2, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Automation Rules", 
+        href: "/admin/marketing/automation-rules", 
+        icon: Zap, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
     ],
-  },
+},
 
   {
-    id: "ai-studio",
-    label: "AI Studio", 
-    items: [
-      { label: "Image Uploads", href: "/admin/ai-studio/banners", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Segment Detection", href: "/admin/ai-studio/campaigns", icon: Tags, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Material Application", href: "/admin/ai-studio/catalog-generation", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Prompt Library", href: "/admin/ai-studio/quotations", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Render History", href: "/admin/ai-studio/coupons", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Saved Designs", href: "/admin/ai-studio/email-templates", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Reference Images", href: "/admin/ai-studio/integrations", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "AI Settings", href: "/admin/ai-studio/automation-rules", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-    ],
+      id: "ai-studio",
+      label: "AI Studio", 
+      items: [
+        { 
+          label: "Image Uploads", 
+          href: "/admin/ai-studio/banners", 
+          icon: ImagePlus, 
+          permission: ["content:read", "content:update", "content:delete"] 
+        },
+        { 
+          label: "Segment Detection", 
+          href: "/admin/ai-studio/campaigns", 
+          icon: ScanSearch, 
+          permission: ["content:read", "content:update", "content:delete"] 
+        },
+        { 
+          label: "Material Application", 
+          href: "/admin/ai-studio/catalog-generation", 
+          icon: Paintbrush, 
+          permission: ["content:read", "content:update", "content:delete"] 
+        },
+        { 
+          label: "Prompt Library", 
+          href: "/admin/ai-studio/quotations", 
+          icon: Terminal, 
+          permission: ["content:read", "content:update", "content:delete"] 
+        },
+        { 
+          label: "Render History", 
+          href: "/admin/ai-studio/coupons", 
+          icon: History, 
+          permission: ["content:read", "content:update", "content:delete"] 
+        },
+        { 
+          label: "Saved Designs", 
+          href: "/admin/ai-studio/email-templates", 
+          icon: Heart, 
+          permission: ["content:read", "content:update", "content:delete"] 
+        },
+        { 
+          label: "Reference Images", 
+          href: "/admin/ai-studio/integrations", 
+          icon: GalleryVerticalEnd, 
+          permission: ["content:read", "content:update", "content:delete"] 
+        },
+        { 
+          label: "AI Settings", 
+          href: "/admin/ai-studio/automation-rules", 
+          icon: Cpu, 
+          permission: ["content:read", "content:update", "content:delete"] 
+        },
+      ],
   },
 
    {
     id: "users",
     label: "Users",
     items: [
-      { label: "All Users", href: "/admin/users/all-users", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Roles & Permissions", href: "/admin/users/roles-permissions", icon: Tags, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Teams", href: "/admin/users/teams", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Invitations", href: "/admin/users/invitations", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Activity Logs", href: "/admin/users/activity-logs", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "API Access", href: "/admin/users/api-access", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-     
+      { 
+        label: "All Users", 
+        href: "/admin/users/all-users", 
+        icon: Users, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Roles & Permissions", 
+        href: "/admin/users/roles-permissions", 
+        icon: Fingerprint, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Teams", 
+        href: "/admin/users/teams", 
+        icon: UsersRound, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Invitations", 
+        href: "/admin/users/invitations", 
+        icon: UserPlus, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "Activity Logs", 
+        href: "/admin/users/activity-logs", 
+        icon: History, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
+      { 
+        label: "API Access", 
+        href: "/admin/users/api-access", 
+        icon: KeyRound, 
+        permission: ["content:read", "content:update", "content:delete"] 
+      },
     ],
-  },
+},
 
-    {
+   {
     id: "settings",
     label: "Settings",
     items: [
-      { label: "General", href: "/admin/settings/general", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Domain & DNS", href: "/admin/settings/domain-dns", icon: Tags, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Billing & Plans", href: "/admin/settings/billing-plans", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Usage & Limits", href: "/admin/settings/usage-limits", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Integrations", href: "/admin/settings/integrations", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Webhooks", href: "/admin/settings/webhooks", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Data Export", href: "/admin/settings/data-export", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Security", href: "/admin/settings/security", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-    
-     
+      { label: "General", href: "/admin/settings/general", icon: Settings2, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Domain & DNS", href: "/admin/settings/domain-dns", icon: Globe, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Billing & Plans", href: "/admin/settings/billing-plans", icon: CreditCard, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Usage & Limits", href: "/admin/settings/usage-limits", icon: Activity, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Integrations", href: "/admin/settings/integrations", icon: Blocks, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Webhooks", href: "/admin/settings/webhooks", icon: Webhook, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Data Export", href: "/admin/settings/data-export", icon: Download, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Security", href: "/admin/settings/security", icon: ShieldCheck, permission: ["content:read", "content:update", "content:delete"] },
     ],
-  },
-
+},
   
   {
     id: "domains",
