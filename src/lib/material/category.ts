@@ -49,11 +49,19 @@ export async function getCategoryById(
 }
 
 
-export async function listCategories(): Promise<MaterialCategory[]> {
+export async function listCategories(websiteId:string): Promise<MaterialCategory[]> {
   const db = await getDatabase();
   const col = db.collection<MaterialCategory>(COLLECTION);
 
-  return col.find({}).sort({ name: 1 }).toArray();
+  const filter: any = {};
+  if (websiteId) {
+    // websiteId is stored as string in the database, not ObjectId
+    filter.websiteId = websiteId;
+  }
+
+  const data = await col.find(filter).sort({ name: 1 }).toArray();
+
+  return data
 }
 
 

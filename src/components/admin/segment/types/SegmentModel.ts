@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 
 export interface MaterialSegmentModel {
   id?: number | null;
@@ -13,4 +14,6 @@ export interface MaterialSegmentModel {
   short_code?: string;
   categories?: string;
   gallery?: string;
+  websiteId?: string | ObjectId;
+  tenantId?: string | ObjectId;
 }

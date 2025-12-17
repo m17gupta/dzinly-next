@@ -1,64 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-
-// Example services (replace with DB / Payload / Prisma / etc)
-import {
-  createCategory,
-  listCategories,
-  getCategoryById,
-  deleteCategory,
-} from "@/lib/material/category";
-import {
-  getBrandById,
-  updateBrand,
-  createBrand,
-  listBrands,
-  deleteBrand,
-} from "@/lib/material/product_brand";
-import {
-  getAttributeById,
-  updateAttribute,
-  createAttribute,
-  listAttributes,
-  deleteAttribute,
-} from "@/lib/material/product_attribute";
+import { entityConfig, isValidEntity } from "@/lib/entities/entityConfig";
 
 export async function POST(req: NextRequest, ctx: any) {
-  // `ctx.params` may be a Promise in Next.js app routes; await the context
-  // before accessing its properties to avoid the sync-dynamic-apis warning.
-  // `ctx.params` may be a Promise in Next.js app routes; await `ctx.params`
-  // before accessing its properties to avoid the sync-dynamic-apis warning.
   const params = (await ctx?.params) ?? {};
   const { entity } = params ?? {};
 
   try {
-    const body = await req.json();
-
-    let result;
-
-    switch (entity) {
-      case "category":
-      case "product_categories":
-        result = await createCategory(body);
-        break;
-
-      case "brand":
-        result = await createBrand(body);
-        break;
-
-      case "segment":
-        //  result = await createSegment(body);
-        break;
-
-      case "attribute":
-         result = await createAttribute(body);
-        break;
-
-      default:
-      // return NextResponse.json(
-      //   { error: `Unsupported entity: ${entity}` },
-      //   { status: 400 }
-      // );
+    if (!isValidEntity(entity)) {
+      return NextResponse.json(
+        { error: `Unsupported entity: ${entity}` },
+        { status: 400 }
+      );
     }
+
+    const body = await req.json();
+    const result = await entityConfig[entity].create(body);
 
     return NextResponse.json(result, { status: 201 });
   } catch (error: any) {
@@ -69,61 +25,35 @@ export async function POST(req: NextRequest, ctx: any) {
   }
 }
 
+
 export async function GET(req: NextRequest, ctx: any) {
-  // Await ctx.params specifically (it may be a Promise) before reading its props.
   const params = (await ctx?.params) ?? {};
   const { entity } = params ?? {};
 
   try {
-    const id = req.nextUrl?.searchParams?.get("id");
-    switch (entity) {
-      case "category":{
-        if (id) {
-          const item = await getCategoryById(id);
-          if (!item)
-            return NextResponse.json({ error: "Not found" }, { status: 404 });
-          return NextResponse.json({ item });
-        }
-
-        const tenantId = req.nextUrl?.searchParams?.get("tenantId");
-        const websiteId = req.nextUrl?.searchParams?.get("websiteId");
-        
-        console.log("tenantId---", tenantId);
-        console.log("websiteId--", websiteId);
-        
-        const items = await listCategories();
-        return NextResponse.json({ items });
-      }
-
-      case "brand": {
-        if (id) {
-          const item = await getBrandById(id);
-          if (!item)
-            return NextResponse.json({ error: "Not found" }, { status: 404 });
-          return NextResponse.json({ item });
-        }
-        const items = await listBrands();
-        return NextResponse.json({ items });
-
-      }
-         case "attribute": {
-        if (id) {
-          const item = await getAttributeById(id);
-          if (!item)
-            return NextResponse.json({ error: "Not found" }, { status: 404 });
-          return NextResponse.json({ item });
-        }
-        const items = await listAttributes();
-        return NextResponse.json({ items });
-
-      }
-
-      default:
-        return NextResponse.json(
-          { error: `Unsupported entity: ${entity}` },
-          { status: 400 }
-        );
+    if (!isValidEntity(entity)) {
+      return NextResponse.json(
+        { error: `Unsupported entity: ${entity}` },
+        { status: 400 }
+      );
     }
+
+    const id = req.nextUrl?.searchParams?.get("id");
+    const websiteId = req.nextUrl?.searchParams?.get("websiteId") || "";
+
+    // If ID is provided, get single item
+    if (id) {
+      const item = await entityConfig[entity].getById(id);
+      if (!item) {
+        return NextResponse.json({ error: "Not found" }, { status: 404 });
+      }
+      return NextResponse.json({ item });
+    }
+
+    // Otherwise, get list of items
+    const items = await entityConfig[entity].list(websiteId);
+    return NextResponse.json({ items });
+    
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || "Server error" },
@@ -132,12 +62,20 @@ export async function GET(req: NextRequest, ctx: any) {
   }
 }
 
+
 export async function DELETE(req: NextRequest, ctx: any) {
   const params = (await ctx?.params) ?? {};
   const { entity } = params ?? {};
 
   try {
-    // id in query or body
+    if (!isValidEntity(entity)) {
+      return NextResponse.json(
+        { error: `Unsupported entity: ${entity}` },
+        { status: 400 }
+      );
+    }
+
+    // Get id from query or body
     const idFromQuery = req.nextUrl?.searchParams?.get("id");
     let id = idFromQuery;
     if (!id) {
@@ -145,37 +83,16 @@ export async function DELETE(req: NextRequest, ctx: any) {
       id = body?.id ?? body?._id;
     }
 
-    if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
-
-    switch (entity) {
-      case "category":
-      case "product_categories": {
-        const deleted = await deleteCategory(id);
-        if (!deleted)
-          return NextResponse.json({ error: "Not found" }, { status: 404 });
-        return NextResponse.json({ success: true });
-      }
-
-      case "brand": {
-        const deleted = await deleteBrand(id);
-        if (!deleted)
-          return NextResponse.json({ error: "Not found" }, { status: 404 });
-        return NextResponse.json({ success: true });
-      }
-
-      case "attribute": {
-        const deleted = await deleteAttribute(id);
-        if (!deleted)
-          return NextResponse.json({ error: "Not found" }, { status: 404 });
-        return NextResponse.json({ success: true });
-      }
-
-      default:
-        return NextResponse.json(
-          { error: `Unsupported entity: ${entity}` },
-          { status: 400 }
-        );
+    if (!id) {
+      return NextResponse.json({ error: "Missing id" }, { status: 400 });
     }
+
+    const deleted = await entityConfig[entity].delete(id);
+    if (!deleted) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    
+    return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || "Server error" },
@@ -184,43 +101,32 @@ export async function DELETE(req: NextRequest, ctx: any) {
   }
 }
 
+
 export async function PATCH(req: NextRequest, ctx: any) {
   const params = (await ctx?.params) ?? {};
   const { entity } = params ?? {};
 
   try {
-    const body = await req.json();
-
-    switch (entity) {
-     
-      case "brand": {
-        const id = body?.id ?? body?._id;
-        if (!id)
-          return NextResponse.json({ error: "Missing id" }, { status: 400 });
-
-        const updated = await updateBrand(id, body);
-        if (!updated)
-          return NextResponse.json({ error: "Not found" }, { status: 404 });
-        return NextResponse.json({ item: updated });
-      }
-
-      case "attribute": {
-        const id = body?.id ?? body?._id;
-        if (!id)
-          return NextResponse.json({ error: "Missing id" }, { status: 400 });
-
-        const updated = await updateAttribute(id, body);
-        if (!updated)
-          return NextResponse.json({ error: "Not found" }, { status: 404 });
-        return NextResponse.json({ item: updated });
-      }
-
-      default:
-        return NextResponse.json(
-          { error: `Unsupported entity: ${entity}` },
-          { status: 400 }
-        );
+    if (!isValidEntity(entity)) {
+      return NextResponse.json(
+        { error: `Unsupported entity: ${entity}` },
+        { status: 400 }
+      );
     }
+
+    const body = await req.json();
+    const id = body?.id ?? body?._id;
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    }
+
+    const updated = await entityConfig[entity].update(id, body);
+    if (!updated) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    
+    return NextResponse.json({ item: updated });
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || "Server error" },

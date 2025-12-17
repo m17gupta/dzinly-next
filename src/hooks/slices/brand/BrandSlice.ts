@@ -15,13 +15,13 @@ const initialState: BrandState = {
 
 export const fetchBrands = createAsyncThunk<
   MaterialBrandModel[],
-  void,
+  {websiteId:string},
   { state: { brand: BrandState }; rejectValue: string }
 >(
   "brand/fetchBrands",
-  async (_, { rejectWithValue }) => {
+  async ({websiteId}, { rejectWithValue }) => {
     try {
-      const res = await fetch(`/api/admin/brand`);
+      const res = await fetch(`/api/admin/brand?websiteId=${websiteId}`);
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         return rejectWithValue(body?.error || `HTTP ${res.status}`);

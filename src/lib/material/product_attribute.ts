@@ -82,9 +82,13 @@ export async function deleteAttribute(
 }
 
 
-export async function listAttributes(): Promise<MaterialAttributes[]> {
+export async function listAttributes(websiteId:string): Promise<MaterialAttributes[]> {
   const db = await getDatabase();
   const col = db.collection<MaterialAttributes>(COLLECTION);
-
-  return col.find({}).sort({ name: 1 }).toArray();
+  const filter: any = {};
+  if (websiteId) {
+    // websiteId is stored as string in the database, not ObjectId
+    filter.websiteId = websiteId;
+  }
+  return col.find({filter}).sort({ name: 1 }).toArray();
 }

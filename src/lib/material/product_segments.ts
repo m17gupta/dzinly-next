@@ -1,8 +1,8 @@
-import { MaterialBrandModel } from "@/components/admin/brand/types/brandModel";
+import { MaterialSegmentModel } from "@/components/admin/segment/types/SegmentModel";
 import { getDatabase } from "@/lib/db/mongodb";
 import { ObjectId } from "mongodb";
 
-const COLLECTION = "product_brands";
+const COLLECTION = "product_segments";
 
 const toObjectId = (id: string | ObjectId) =>
   typeof id === "string" ? new ObjectId(id) : id;
@@ -10,21 +10,21 @@ const toObjectId = (id: string | ObjectId) =>
 const escapeRegExp = (s: string) =>
   s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-export async function getBrandById(
+export async function getSegmentById(
   id: string | ObjectId
-): Promise<MaterialBrandModel | null> {
+): Promise<MaterialSegmentModel | null> {
   const db = await getDatabase();
-  const col = db.collection<MaterialBrandModel>(COLLECTION);
+  const col = db.collection<MaterialSegmentModel>(COLLECTION);
 
   return col.findOne({ _id: toObjectId(id) } as any);
 }
 
-export async function updateBrand(
+export async function updateSegment(
   id: string | ObjectId,
-  data: Partial<MaterialBrandModel>
-): Promise<MaterialBrandModel | null> {
+  data: Partial<MaterialSegmentModel>
+): Promise<MaterialSegmentModel | null> {
   const db = await getDatabase();
-  const col = db.collection<MaterialBrandModel>(COLLECTION);
+  const col = db.collection<MaterialSegmentModel>(COLLECTION);
 
   if (data.name) data.name = data.name.trim();
 
@@ -41,19 +41,19 @@ export async function updateBrand(
 }
 
 
-export async function createBrand(
-  data: MaterialBrandModel
-): Promise<MaterialBrandModel> {
+export async function createSegment(
+  data: MaterialSegmentModel
+): Promise<MaterialSegmentModel> {
   if (!data?.name?.trim()) throw new Error("Name is required");
 
   const db = await getDatabase();
-  const col = db.collection<MaterialBrandModel>(COLLECTION);
+  const col = db.collection<MaterialSegmentModel>(COLLECTION);
 
   // prevent duplicate name (case-insensitive)
   const exists = await col.findOne({
     name: { $regex: `^${escapeRegExp(data.name)}$`, $options: "i" },
   } as any);
-  if (exists) throw new Error("Brand with same name already exists");
+  if (exists) throw new Error("Segment with same name already exists");
 
   const now = new Date();
 
@@ -66,15 +66,15 @@ export async function createBrand(
   };
 
   const result = await col.insertOne(doc as any);
-  return { ...doc, _id: result.insertedId } as MaterialBrandModel;
+  return { ...doc, _id: result.insertedId } as MaterialSegmentModel;
 }
 
 
-export async function deleteBrand(
+export async function deleteSegment(
   id: string | ObjectId
 ): Promise<boolean> {
   const db = await getDatabase();
-  const col = db.collection<MaterialBrandModel>(COLLECTION);
+  const col = db.collection<MaterialSegmentModel>(COLLECTION);
 
   const _id = toObjectId(id);
   const result = await col.deleteOne({ _id } as any);
@@ -82,9 +82,9 @@ export async function deleteBrand(
 }
 
 
-export async function listBrands(websiteId:string): Promise<MaterialBrandModel[]> {
+export async function listSegments(websiteId:string): Promise<MaterialSegmentModel[]> {
   const db = await getDatabase();
-  const col = db.collection<MaterialBrandModel>(COLLECTION);
+  const col = db.collection<MaterialSegmentModel>(COLLECTION);
   const filter: any = {};
   if (websiteId) {
     // websiteId is stored as string in the database, not ObjectId

@@ -15,13 +15,13 @@ const initialState: AttributeState = {
 
 export const fetchAttributes = createAsyncThunk<
   MaterialAttributes[],
-  void,
+  {websiteId:string},
   { state: { attribute: AttributeState }; rejectValue: string }
 >(
   "attribute/fetchAttributes",
-  async (_, { rejectWithValue }) => {
+  async ({websiteId}, { rejectWithValue }) => {
     try {
-      const res = await fetch(`/api/admin/attribute`);
+      const res = await fetch(`/api/admin/attribute?websiteId=${websiteId}`);
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         return rejectWithValue(body?.error || `HTTP ${res.status}`);

@@ -8,6 +8,7 @@ import type { MaterialCategory } from "./category/types/CategoryModel";
 import type { MaterialBrandModel } from "./brand/types/brandModel";
 import { MaterialAttributes } from "./attribute/types/attributeModel";
 import { MaterialSegmentModel } from "./segment/types/SegmentModel";
+import { IconImg, IconSVG } from "@/components/ui/icon-display";
 
 type Props = { entity: string };
 
@@ -17,18 +18,16 @@ export default function EntityCreateModal({ entity }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-
-  const {listCategory}=useSelector(
-    (state: RootState) => state.category
-  );
+  const { listCategory } = useSelector((state: RootState) => state.category);
   // read tenant and website from redux store so we can include them in payloads
   const currentWebsite = useSelector(
     (state: RootState) => state.websites.currentWebsite
   );
   const currentUser = useSelector((state: RootState) => state.user.user);
 
-
-  const filterCategory= listCategory.filter(item=>item.websiteId===currentWebsite?._id)
+  const filterCategory = listCategory.filter(
+    (item) => item.websiteId === currentWebsite?._id
+  );
   const dispatch = useDispatch();
 
   // Category-specific state derived from MaterialCategory
@@ -208,8 +207,12 @@ export default function EntityCreateModal({ entity }: Props) {
       const websiteId = currentWebsite?.websiteId ?? currentWebsite?._id;
       if (websiteId) payload.websiteId = websiteId;
       if (currentUser?.tenantId) payload.tenantId = currentUser.tenantId;
-    } else if (entity === "segment") payload = segment;
-    else if (entity === "brand") {
+    } else if (entity === "segment") {
+      payload = { ...segment } as any;
+      const websiteId = currentWebsite?.websiteId ?? currentWebsite?._id;
+      if (websiteId) payload.websiteId = websiteId;
+      if (currentUser?.tenantId) payload.tenantId = currentUser.tenantId;
+    } else if (entity === "brand") {
       payload = { ...brand } as any;
       const websiteId = currentWebsite?.websiteId ?? currentWebsite?._id;
       if (websiteId) payload.websiteId = websiteId;
@@ -260,8 +263,7 @@ export default function EntityCreateModal({ entity }: Props) {
             );
             dispatch(addBrand(created));
           }
-        }
-        else if (entity === "attribute") {
+        } else if (entity === "attribute") {
           // backend may return the created item directly or under keys like `item` or `brand`
           const created = data?.item ?? data?.brand ?? data;
           if (created) {
@@ -269,6 +271,15 @@ export default function EntityCreateModal({ entity }: Props) {
               "@/hooks/slices/attribute/AttributeSlice"
             );
             dispatch(addAttribute(created));
+          }
+        } else if (entity === "segment") {
+          // backend may return the created item directly or under keys like `item` or `brand`
+          const created = data?.item ?? data?.segment ?? data;
+          if (created) {
+            const { addSegment } = await import(
+              "@/hooks/slices/segment/SegmentSlice"
+            );
+            dispatch(addSegment(created));
           }
         }
       } catch (e) {
@@ -383,7 +394,38 @@ export default function EntityCreateModal({ entity }: Props) {
                       </div>
                     )}
                   </div>
-
+                  <div>
+                    <label className="block text-sm font-medium">
+                      Description
+                    </label>
+                    <span className="text-gray-400 text-xs font-normal">
+                      Optional
+                    </span>
+                    <textarea
+                      value={segment.description || ""}
+                      onChange={(e) =>
+                        setSegment({ ...segment, description: e.target.value })
+                      }
+                      className="mt-1 block w-full rounded-md border p-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">
+                      Short Code
+                    </label>
+                    <input
+                      value={segment.short_code || ""}
+                      onChange={(e) =>
+                        setSegment({ ...segment, short_code: e.target.value })
+                      }
+                      className="mt-1 block w-full rounded-md border p-2"
+                    />
+                    {fieldErrors.short_code && (
+                      <div className="text-sm text-destructive mt-1">
+                        {fieldErrors.short_code}
+                      </div>
+                    )}
+                  </div>
                   <div>
                     <label className="block text-sm font-medium">Color</label>
                     <input
@@ -392,6 +434,29 @@ export default function EntityCreateModal({ entity }: Props) {
                         setSegment({ ...segment, color: e.target.value })
                       }
                       className="mt-1 block w-full rounded-md border p-2"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium">
+                      Color Code
+                    </label>
+                    <input
+                      type="color"
+                      value={segment.color_code||""}
+                       onChange={(e) =>
+                        setSegment({ ...segment, color_code: e.target.value })
+                      }
+                      className="w-12 h-10 p-1 border rounded"
+                    />
+                    <input
+                      type="text"
+                    value={segment.color_code||""}
+                       onChange={(e) =>
+                        setSegment({ ...segment, color_code: e.target.value })
+                      }
+                      className="flex-1"
+                      placeholder="#000000"
                     />
                   </div>
 
@@ -415,9 +480,65 @@ export default function EntityCreateModal({ entity }: Props) {
                     )}
                   </div>
 
-                  <div className="flex gap-4">
-                    <label className="inline-flex items-center gap-2">
+                  <div className="mb-5">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Icon URL
+                    </label>
+                    <div className="space-y-2">
                       <input
+                        type="text"
+                        name="icon"
+                        value={segment.icon || ""}
+                        placeholder="https://example.com/icon.png"
+                        className="w-full border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-shadow"
+                        onChange={(e) =>
+                          setSegment({ ...segment, icon: e.target.value })
+                        }
+                      />
+                      {/* Icon Preview */}
+                      {segment.icon && (
+                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                          <span className="text-xs text-gray-600 font-medium">
+                            Preview:
+                          </span>
+                          <IconImg src={segment.icon} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mb-5">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Icon SVG
+                    </label>
+                    <div className="space-y-2">
+                      <textarea
+                        name="icon_svg"
+                        value={segment.icon_svg || ""}
+                        placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">...</svg>'
+                        rows={3}
+                        className="w-full border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono resize-none transition-shadow"
+                        onChange={(e) =>
+                          setSegment({ ...segment, icon_svg: e.target.value })
+                        }
+                      />
+                      {/* SVG Preview */}
+                      {segment.icon_svg && (
+                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                          <span className="text-xs text-gray-600 font-medium">
+                            Preview:
+                          </span>
+                          <IconSVG svg={segment.icon_svg as any} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <label htmlFor="segment-is-active" className="inline-flex items-center gap-2">
+                      <input
+                        id="segment-is-active"
+                        name="is_active"
                         type="checkbox"
                         checked={segment.is_active}
                         onChange={(e) =>
@@ -429,8 +550,10 @@ export default function EntityCreateModal({ entity }: Props) {
                       />
                       <span className="text-sm">Active</span>
                     </label>
-                    <label className="inline-flex items-center gap-2">
+                    <label htmlFor="segment-is-visible" className="inline-flex items-center gap-2">
                       <input
+                        id="segment-is-visible"
+                        name="is_visible"
                         type="checkbox"
                         checked={segment.is_visible}
                         onChange={(e) =>
@@ -517,7 +640,6 @@ export default function EntityCreateModal({ entity }: Props) {
                 </>
               ) : entity === "attribute" ? (
                 <>
-              
                   <div>
                     <label className="block text-sm font-medium">Name</label>
                     <input
@@ -538,18 +660,23 @@ export default function EntityCreateModal({ entity }: Props) {
                       Category
                     </label>
                     <select
-                      value={String(attribute.category_id || "")} 
+                      value={String(attribute.category_id || "")}
                       onChange={(e) =>
                         setAttribute({
                           ...attribute,
-                          category_id: e.target.value ? e.target.value as any : null,
+                          category_id: e.target.value
+                            ? (e.target.value as any)
+                            : null,
                         })
                       }
                       className="mt-1 block w-full rounded-md border p-2"
                     >
                       <option value="">Select category</option>
                       {filterCategory.map((cat) => (
-                        <option key={String(cat._id || cat.id)} value={String(cat._id || cat.id)}>
+                        <option
+                          key={String(cat._id || cat.id)}
+                          value={String(cat._id || cat.id)}
+                        >
                           {cat.name}
                         </option>
                       ))}
@@ -557,9 +684,7 @@ export default function EntityCreateModal({ entity }: Props) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium">
-                      Unit
-                    </label>
+                    <label className="block text-sm font-medium">Unit</label>
                     <input
                       value={attribute.unit || ""}
                       onChange={(e) =>

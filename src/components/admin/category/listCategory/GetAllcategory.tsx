@@ -15,8 +15,10 @@ const GetAllcategory = () => {
 
   useEffect(() => {
     if (!hasFetched && 
-      !isCategoryLoading) {
-      dispatch(fetchCategories());
+      !isCategoryLoading &&
+    currentWebsite &&
+  currentWebsite._id) {
+      dispatch(fetchCategories({websiteId:currentWebsite._id}));
     }
   }, [hasFetched, isCategoryLoading, user,dispatch,currentWebsite]);
 

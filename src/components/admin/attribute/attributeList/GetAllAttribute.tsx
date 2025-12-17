@@ -8,14 +8,18 @@ const GetAllAttribute = () => {
     const { isCategoryLoading, hasFetched } = useSelector(
     (state: RootState) => state.category
   )
-
+  const { currentWebsite } = useSelector((state: RootState) => state.websites);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (!hasFetched && !isCategoryLoading) {
-      dispatch(fetchAttributes());
+    if (!hasFetched && !isCategoryLoading &&
+         currentWebsite &&
+      currentWebsite._id
+    )
+       {
+      dispatch(fetchAttributes({websiteId:currentWebsite._id}));
     }
-  }, [hasFetched, isCategoryLoading, dispatch]);
+  }, [hasFetched, isCategoryLoading,currentWebsite, dispatch]);
   return (
     null
   )
