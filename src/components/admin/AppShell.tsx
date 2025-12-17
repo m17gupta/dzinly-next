@@ -121,15 +121,15 @@ type NavSection = {
 
 const currentWebsiteSections: NavSection[] = [
   {
-    id: "overview",
+    id: "dashboard-overview",
     label: "Overview",
     items: [
-      { label: "Dashboard", href: "/admin/pages", icon: LayoutDashboard },
-      { label: "Analytics", href: "/admin/posts", icon: FileText, permission: "websites:update" },
-      { label: "Activity Log", href: "/admin/media", icon: Images, permission: "analytics:view" },
-      { label: "Notifications", href: "/admin/header", icon: RectangleHorizontal, permission: "security:read" },
-      { label: "System Health", href: "/admin/footer", icon: RectangleVertical, permission: "security:read" },
-      { label: "Quick Actions", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
+      { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+      { label: "Analytics", href: "/admin/analytics", icon: FileText, permission: "websites:update" },
+      { label: "Activity Log", href: "/admin/activity", icon: Images, permission: "analytics:view" },
+      { label: "Notifications", href: "/admin/notifications", icon: RectangleHorizontal, permission: "security:read" },
+      { label: "System Health", href: "/admin/health", icon: RectangleVertical, permission: "security:read" },
+      { label: "Quick Actions", href: "/admin/quick-actions", icon: Navigation, permission: "security:read" },
     ],
   },
 
@@ -144,9 +144,9 @@ const currentWebsiteSections: NavSection[] = [
       { label: "Header", href: "/admin/header", icon: RectangleHorizontal, permission: "security:read" },
       { label: "Footer", href: "/admin/footer", icon: RectangleVertical, permission: "security:read" },
       { label: "Navigation", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
-      { label: "Forms", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
-      { label: "Redirects", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
-      { label: "Domain Settings", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
+      { label: "Forms", href: "/admin/forms", icon: Navigation, permission: "security:read" },
+      { label: "Redirects", href: "/admin/redirects", icon: Navigation, permission: "security:read" },
+      { label: "Domain Settings", href: "/admin/domain", icon: Navigation, permission: "security:read" },
 
 
     ],
@@ -293,8 +293,9 @@ function useHasPermission(user: User | null) {
   );
 }
 
-// Section “header icon” like screenshot (one icon per group)
+// Section "header icon" like screenshot (one icon per group)
 const sectionIconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
+  "dashboard-overview": LayoutDashboard,
   "website-overview": LayoutDashboard,
   products: Tags,
   branding: Palette,

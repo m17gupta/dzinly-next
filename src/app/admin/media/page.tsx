@@ -82,8 +82,8 @@ export default function MediaGalleryCMS() {
   const filteredMedia = useMemo(() => {
     return mediaItems.filter((item) => {
       const matchesSearch = item.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+        ? item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        : false;
 
       const matchesCategory =
         selectedCategory === "all" || item.category === selectedCategory;
