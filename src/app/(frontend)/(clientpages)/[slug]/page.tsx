@@ -7,6 +7,8 @@ export default async function PageTemplate({ params }: any) {
 
   const host = headersList.get("host");
 
+  console.log("Host===>>>", host)
+
   const main = await fetch(`${API_BASE_URL}/api/domain/${host}`);
 
   const domainData = await main.json();
@@ -26,6 +28,8 @@ export default async function PageTemplate({ params }: any) {
 
   const session = await auth();
 
+  console.log(session?.user.role)
+
   const res = await fetch(`${API_BASE_URL}/api/pages/websites?${query}`);
 
   const t = await res.json();
@@ -35,7 +39,7 @@ export default async function PageTemplate({ params }: any) {
   const EditButton = (await import("../EditButton")).default;
   return (
     <div>
-      {session && session.user && session.user.role == "owner" && (
+      {session && session.user && (session.user.role == "owner" || session?.user.role=="A" )&& (
         <EditButton pageData={t.item} />
       )}
       <div dangerouslySetInnerHTML={{ __html: html }} />
