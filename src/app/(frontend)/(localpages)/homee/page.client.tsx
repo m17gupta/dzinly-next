@@ -17,7 +17,7 @@ export default function RootClientPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 selection:text-primary">
+    <main className="min-h-screen bg-background text-foreground font-sans">
       
       {/* =========================================
          SECTION 1: HERO (Plum Brand Color)
@@ -33,8 +33,8 @@ export default function RootClientPage() {
             <img src="/dzinlylogo.svg" alt="Dzinly Logo" className="w-56 h-auto brightness-0 invert" />
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-black text-primary-foreground mb-6 tracking-tight leading-[1.1]">
-            Management <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-amber-200">Redefined.</span>
+          <h1 className="text-5xl md:text-7xl font-black text-white mb-6  leading-[1.1]">
+            Management <span className="text-white">Redefined.</span>
           </h1>
           
           <p className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-10 leading-relaxed font-light">

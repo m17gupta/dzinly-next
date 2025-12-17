@@ -196,6 +196,32 @@
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight text-foreground font-semibold;
   }
+
+  /* This ensures all text selection across the site is white on a primary background */
+  ::selection {
+    background-color: var(--primary);
+    color: #ffffff;
+  }
+
+  /* High-Contrast Selection Strategy */
+  ::selection {
+    /* Uses the Primary Maroon for the highlight background */
+    background-color: var(--primary); 
+    /* Forces the text to pure white for maximum readability on maroon */
+    color: #ffffff !important; 
+  }
+
+  /* Specific override for Webkit browsers (Chrome, Safari, Edge) */
+  ::-webkit-selection {
+    background-color: var(--primary);
+    color: #ffffff !important;
+  }
+
+  /* Specific override for Firefox */
+  ::-moz-selection {
+    background-color: var(--primary);
+    color: #ffffff !important;
+  }
 }
 
 /* -----------------------------------------------------------------------
