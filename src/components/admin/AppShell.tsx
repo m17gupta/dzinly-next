@@ -42,6 +42,10 @@ import {
   ImagePlus, 
   ScanSearch, 
   Paintbrush, 
+  Bot,
+  Network ,
+  Compass ,
+  Tag,
   Terminal, 
   Heart, 
   GalleryVerticalEnd, 
@@ -86,13 +90,14 @@ import {
 
   PanelTop, 
   PanelBottom, 
-  Compass, 
+
   ClipboardList, 
   ArrowLeftRight, 
 
 
 
 } from "lucide-react";
+import { FaChevronCircleLeft,FaChevronCircleRight } from "react-icons/fa";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -191,11 +196,11 @@ const currentWebsiteSections: NavSection[] = [
     label: "Overview",
     items: [
       { label: "Dashboard", href: "/admin/pages", icon: LayoutDashboard },
-      { label: "Analytics", href: "/admin/posts", icon: BarChart3, permission: "websites:update" },
-      { label: "Activity Log", href: "/admin/media", icon: Activity, permission: "analytics:view" },
-      { label: "Notifications", href: "/admin/header", icon: Bell, permission: "security:read" },
-      { label: "System Health", href: "/admin/footer", icon: HeartPulse, permission: "security:read" },
-      { label: "Quick Actions", href: "/admin/navigation", icon: Zap, permission: "security:read" },
+      { label: "Analytics", href: "/admin/analytics", icon: BarChart3, permission: "websites:update" },
+      { label: "Activity Log", href: "/admin/activity-log", icon: Activity, permission: "analytics:view" },
+      { label: "Notifications", href: "/admin/notifications", icon: Bell, permission: "security:read" },
+      { label: "System Health", href: "/admin/system-health", icon: HeartPulse, permission: "security:read" },
+      { label: "Quick Actions", href: "/admin/quick-actions", icon: Zap, permission: "security:read" },
     ],
 },
 
@@ -223,7 +228,7 @@ const currentWebsiteSections: NavSection[] = [
       { 
         label: "Brand Profile", 
         href: "/admin/branding/brand-profile", 
-        icon: Briefcase, 
+        icon: LayoutGrid, 
         permission: ["content:read", "content:update", "content:delete"] 
       },
       { 
@@ -456,49 +461,49 @@ const currentWebsiteSections: NavSection[] = [
       items: [
         { 
           label: "Image Uploads", 
-          href: "/admin/ai-studio/banners", 
+          href: "/admin/ai-studio/image-uploads", 
           icon: ImagePlus, 
           permission: ["content:read", "content:update", "content:delete"] 
         },
         { 
           label: "Segment Detection", 
-          href: "/admin/ai-studio/campaigns", 
+          href: "/admin/ai-studio/segment-detection", 
           icon: ScanSearch, 
           permission: ["content:read", "content:update", "content:delete"] 
         },
         { 
           label: "Material Application", 
-          href: "/admin/ai-studio/catalog-generation", 
+          href: "/admin/ai-studio/material-application", 
           icon: Paintbrush, 
           permission: ["content:read", "content:update", "content:delete"] 
         },
         { 
           label: "Prompt Library", 
-          href: "/admin/ai-studio/quotations", 
+          href: "/admin/ai-studio/prompt-library", 
           icon: Terminal, 
           permission: ["content:read", "content:update", "content:delete"] 
         },
         { 
           label: "Render History", 
-          href: "/admin/ai-studio/coupons", 
+          href: "/admin/ai-studio/render-history", 
           icon: History, 
           permission: ["content:read", "content:update", "content:delete"] 
         },
         { 
           label: "Saved Designs", 
-          href: "/admin/ai-studio/email-templates", 
+          href: "/admin/ai-studio/saved-designs", 
           icon: Heart, 
           permission: ["content:read", "content:update", "content:delete"] 
         },
         { 
           label: "Reference Images", 
-          href: "/admin/ai-studio/integrations", 
+          href: "/admin/ai-studio/reference-images", 
           icon: GalleryVerticalEnd, 
           permission: ["content:read", "content:update", "content:delete"] 
         },
         { 
           label: "AI Settings", 
-          href: "/admin/ai-studio/automation-rules", 
+          href: "/admin/ai-studio/ai-settings", 
           icon: Cpu, 
           permission: ["content:read", "content:update", "content:delete"] 
         },
@@ -592,12 +597,20 @@ function useHasPermission(user: User | null) {
 }
 
 // Section "header icon" like screenshot (one icon per group)
-const sectionIconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
-  "dashboard-overview": LayoutDashboard,
-  "website-overview": LayoutDashboard,
-  products: Tags,
+const sectionIconMap: Record<
+  string,
+  React.ComponentType<React.SVGProps<SVGSVGElement>>
+> = {
+  "dashboard-overview": LayoutGrid,
+  websites: Globe,
   branding: Palette,
-  domains: Globe2,
+  products: Tag,
+  ecommerce: ShoppingCart,
+  marketing: Megaphone,
+  "ai-studio": Bot,
+  users: Users,
+  settings: Settings,
+  domains: Network,
 };
 
 // ---------------------------------------------------------------------------
@@ -745,14 +758,14 @@ function Sidebar({
                             <Tooltip delayDuration={150}>
                               <TooltipTrigger asChild>
                                 <button
-                                  type="button"
+                                  type="button" 
                                   className={cn(
                                     "w-full flex items-center justify-center",
                                     "h-11 rounded-md bg-white/70 hover:bg-white transition",
                                     "border border-black/5 shadow-sm"
                                   )}
                                 >
-                                  <HeaderIcon className="h-5 w-5 text-black/70" />
+                                 <HeaderIcon className="h-5 w-5 text-black/70" />
                                 </button>
                               </TooltipTrigger>
                               <TooltipContent side="right">{section.label}</TooltipContent>
@@ -825,7 +838,7 @@ function Sidebar({
                             )}
                           >
                             <div className="grid h-9 w-9 place-items-center rounded-md bg-white border shadow-sm">
-                              <HeaderIcon className="h-4 w-4 text-black/70" />
+                              <HeaderIcon className="h-4 w-4 text-black/70 "/>
                             </div>
 
                             <div className="flex-1">
@@ -897,17 +910,29 @@ function Sidebar({
               </ScrollArea>
 
               {/* collapse button */}
-              <div className="border-t border-black/10 p-3">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full rounded-md justify-between bg-white/60 hover:bg-white border border-black/5 shadow-sm text-black/70"
-                  onClick={onToggleCollapse}
-                >
-                  <span className="text-xs font-medium">Collapse</span>
-                  <span className="text-sm">⟷</span>
-                </Button>
-              </div>
+             <div className="border-t border-black/10 p-3">
+              <Button
+                variant="ghost"
+
+                className="w-full rounded-md justify-between bg-white/60 hover:bg-white border border-black/5 shadow-sm text-black/70"
+                onClick={onToggleCollapse}
+              >
+                {!collapsed && (
+                  <>
+                    <span className="text-xs font-medium">Collapse</span>
+                    <FaChevronCircleLeft className="h-8 w-8" />
+                  </>
+                )}
+
+                {collapsed && (
+                  <>
+                    <span className="text-xs font-medium">Expand</span>
+                    <FaChevronCircleRight className="h-8 w-8" />
+                  </>
+                )}
+              </Button>
+            </div>
+
             </div>
           </div>
         </div>
@@ -1004,7 +1029,8 @@ function MobileSidebar({
                   >
                     <div className="flex items-center gap-3">
                       <div className="grid h-9 w-9 place-items-center rounded-md bg-background border">
-                        <HeaderIcon className="h-4 w-4" />
+                       <LayoutGrid className="h-4 w-4 text-black/70" />
+
                       </div>
                       <div className="text-sm font-semibold">{section.label}</div>
                     </div>
