@@ -33,26 +33,51 @@ export function AppShellClient({
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
+
+    const resetRedux = () => {
+    dispatch(clearAttributes());
+    dispatch(clearBrands());
+    dispatch(clearSegments());
+    dispatch(clearCategories());
+    dispatch(clearProducts());
+  };
   const handleWebsiteChange = async (websiteId: string) => {
+      const newWebsite = websites.find((w) => w._id === websiteId) || null;
+    console.log("newWebsite", newWebsite);
+    setCurrentWebsite(newWebsite);
     try {
       // Call API to update the current website cookie
-      await fetch("/api/session/website", {
+       const response = await fetch("/api/session/website", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ websiteId }),
       });
+           if (response.ok) {
+          // Clear Redux state first to prevent old data from being used
+          resetRedux();
+          // Navigate to /admin (which will load fresh data for new website)
+           window.location.href = "/admin";
+          // router.push("/admin")
+        } else {
+          console.error("Failed to update website context");
+          // Revert the optimistic update
+          setCurrentWebsite(initialCurrentWebsite);
+        }
     } catch (error) {
       console.error("Error updating website context:", error);
+        setCurrentWebsite(initialCurrentWebsite);
     }
   };
 
-  useEffect(() => {
-    if (initialCurrentWebsite) {
-      handleWebsiteChange(initialCurrentWebsite._id);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (initialCurrentWebsite) {
+  //     handleWebsiteChange(initialCurrentWebsite._id);
+  //   }
+  // }, []);
+
+  
 
   // When client receives server-provided websites, save them to Redux
   useEffect(() => {
@@ -65,13 +90,7 @@ export function AppShellClient({
     }
   }, [dispatch, websites, initialCurrentWebsite]);
 
-  const resetRedux = () => {
-    dispatch(clearAttributes());
-    dispatch(clearBrands());
-    dispatch(clearSegments());
-    dispatch(clearCategories());
-    dispatch(clearProducts());
-  };
+
 
   return (
     <AppShell

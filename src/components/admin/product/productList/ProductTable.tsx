@@ -1,26 +1,19 @@
 "use client";
-import { AppDispatch, RootState } from '@/store/store';
-import React, { useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { DataTableExt } from '@/components/admin/DataTableExt';
-import { removeProduct } from '@/hooks/slices/product/ProductSlice';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { AppDispatch, RootState } from "@/store/store";
+import React, { useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataTableExt } from "@/components/admin/DataTableExt";
+import { removeProduct } from "@/hooks/slices/product/ProductSlice";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const ProductTable = () => {
-
   const { listProduct, isProductLoading } = useSelector(
     (state: RootState) => state.product
   );
-  const { listCategory } = useSelector(
-    (state: RootState) => state.category
-  );
-  const { listBrand } = useSelector(
-    (state: RootState) => state.brand
-  );
-  const { listSegment } = useSelector(
-    (state: RootState) => state.segment
-  );
+  const { listCategory } = useSelector((state: RootState) => state.category);
+  const { listBrand } = useSelector((state: RootState) => state.brand);
+  const { listSegment } = useSelector((state: RootState) => state.segment);
   const { currentWebsite } = useSelector((state: RootState) => state.websites);
   const dispatch = useDispatch<AppDispatch>();
   const { toast } = useToast();
@@ -28,20 +21,24 @@ const ProductTable = () => {
 
   const products = useMemo(() => {
     if (listProduct && listProduct.length > 0) {
-      return listProduct.map(item => {
+      return listProduct.map((item) => {
         const categoryId = item.product_category_id;
         const brandId = item.brand_id;
         const segmentId = item.material_segment_id;
-        
-        const category = listCategory.find(cat => cat._id == categoryId)?.name;
-        const brand = listBrand.find(b => (b as any)._id == brandId)?.name;
-        const segment = listSegment.find(s => (s as any)._id == segmentId)?.name;
-        
+
+        const category = listCategory.find(
+          (cat) => cat._id == categoryId
+        )?.name;
+        const brand = listBrand.find((b) => (b as any)._id == brandId)?.name;
+        const segment = listSegment.find(
+          (s) => (s as any)._id == segmentId
+        )?.name;
+
         return {
           ...item,
-          category: category || '-',
-          brand: brand || '-',
-          segment: segment || '-',
+          category: category || "-",
+          brand: brand || "-",
+          segment: segment || "-",
         };
       });
     }
@@ -51,7 +48,7 @@ const ProductTable = () => {
   const handleDelete = async (row: any) => {
     const id = row?._id ?? row?.id;
     if (!id) {
-      toast({ title: 'Delete failed', description: 'Missing id' });
+      toast({ title: "Delete failed", description: "Missing id" });
       return;
     }
 
@@ -60,17 +57,23 @@ const ProductTable = () => {
 
     try {
       const res = await fetch(`/api/admin/products/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body?.error || `HTTP ${res.status}`);
       }
       dispatch(removeProduct(id));
-      toast({ title: 'Deleted', description: `Product ${row?.name ?? id} removed` });
+      toast({
+        title: "Deleted",
+        description: `Product ${row?.name ?? id} removed`,
+      });
     } catch (err: any) {
-      console.error('Failed to delete product', err);
-      toast({ title: 'Delete failed', description: String(err?.message || err) });
+      console.error("Failed to delete product", err);
+      toast({
+        title: "Delete failed",
+        description: String(err?.message || err),
+      });
     }
   };
 
@@ -82,15 +85,16 @@ const ProductTable = () => {
   };
 
   const initialColumns = [
-    { key: '_id', label: 'ID', hidden: true },
-    { key: 'id', label: 'ID', hidden: true },
-    { key: 'name', label: 'Name' },
-    { key: 'description', label: 'Description' },
-    { key: 'category', label: 'Category' },
-    { key: 'brand', label: 'Brand' },
-    { key: 'segment', label: 'Segment' },
-    { key: 'base_price', label: 'Price' },
-    { key: 'createdAt', label: 'Created' },
+    { key: "_id", label: "ID", hidden: true },
+    { key: "id", label: "ID", hidden: true },
+    { key: "product_category_id", label: "Product category Id", hidden: true },
+    { key: "name", label: "Name" },
+    { key: "description", label: "Description" },
+    { key: "category", label: "Category" },
+    { key: "brand", label: "Brand" },
+    { key: "segment", label: "Segment" },
+    { key: "base_price", label: "Price" },
+    { key: "createdAt", label: "Created" },
   ];
 
   return (
@@ -104,7 +108,7 @@ const ProductTable = () => {
         onView={(row) => handleView(row)}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ProductTable
+export default ProductTable;
