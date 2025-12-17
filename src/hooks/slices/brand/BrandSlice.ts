@@ -83,7 +83,9 @@ const brandSlice = createSlice({
     },
     clearBrands(state) {
       state.listBrand = [];
-    },
+      state.hasFetched= false;
+      state.isBrandLoading= false
+        },
   },
   extraReducers: (builder) => {
     builder
@@ -93,9 +95,11 @@ const brandSlice = createSlice({
       .addCase(
         fetchBrands.fulfilled,
         (state, action: PayloadAction<MaterialBrandModel[]>) => {
+           if(action.payload && action.payload.length){
           state.listBrand = action.payload;
           state.hasFetched = true;
           state.isBrandLoading = false;
+           }
         }
       )
       .addCase(fetchBrands.rejected, (state) => {

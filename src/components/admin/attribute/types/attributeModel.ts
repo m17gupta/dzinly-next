@@ -14,4 +14,5 @@ export interface MaterialAttributes {
   possible_values?: (string | number)[] | null;
   type?: string;
   category_id?: number | null | MaterialCategory | undefined;
+  category?:MaterialCategory
 }

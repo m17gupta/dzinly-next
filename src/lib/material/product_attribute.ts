@@ -90,5 +90,5 @@ export async function listAttributes(websiteId:string): Promise<MaterialAttribut
     // websiteId is stored as string in the database, not ObjectId
     filter.websiteId = websiteId;
   }
-  return col.find({filter}).sort({ name: 1 }).toArray();
+  return col.find(filter).sort({ name: 1 }).toArray();
 }

@@ -5,21 +5,22 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 const GetAllAttribute = () => {
-    const { isCategoryLoading, hasFetched } = useSelector(
-    (state: RootState) => state.category
+    const { isAttributeLoading, hasFetched } = useSelector(
+    (state: RootState) => state.attribute
   )
   const { currentWebsite } = useSelector((state: RootState) => state.websites);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (!hasFetched && !isCategoryLoading &&
+    if (!hasFetched &&
+       !isAttributeLoading &&
          currentWebsite &&
       currentWebsite._id
     )
        {
       dispatch(fetchAttributes({websiteId:currentWebsite._id}));
     }
-  }, [hasFetched, isCategoryLoading,currentWebsite, dispatch]);
+  }, [hasFetched, isAttributeLoading,currentWebsite, dispatch]);
   return (
     null
   )

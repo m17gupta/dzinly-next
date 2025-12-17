@@ -63,6 +63,10 @@ import { Badge } from "@/components/ui/badge";
 import { signOut } from "next-auth/react";
 import { useDispatch } from "react-redux";
 import { store } from "@/store/store";
+import { clearAttributes } from "@/hooks/slices/attribute/AttributeSlice";
+import { clearBrands } from "@/hooks/slices/brand/BrandSlice";
+import { clearSegments } from "@/hooks/slices/segment/SegmentSlice";
+import { clearCategories } from "@/hooks/slices/category/CategorySlice";
 
 // ---------------------------------------------------------------------------
 // Types & interfaces
@@ -658,12 +662,15 @@ function Topbar({ currentWebsite, user, onToggleMobileSidebar }: TopbarProps) {
 
   const handleSignOut = async () => {
     try {
-      store.dispatch({ type: "user/setUser", payload: null });
-      store.dispatch({ type: "pageEdit/resetState" });
-      store.dispatch({ type: "category/resetState" });
-      store.dispatch({ type: "brand/resetState" });
-      store.dispatch({ type: "websites/resetState" });
-
+      // Clear Redux store by resetting to initial state
+      // Reset each slice to its initial state
+      // store.dispatch({ type: 'user/setUser', payload: null });
+      // store.dispatch({ type: 'pageEdit/resetState' });
+      // store.dispatch({ type: 'category/resetState' });
+      // store.dispatch({ type: 'brand/resetState' });
+      // store.dispatch({ type: 'websites/resetState' });
+      resetRedux()
+      // Clear localStorage and sessionStorage
       localStorage.clear();
       sessionStorage.clear();
 
@@ -674,6 +681,12 @@ function Topbar({ currentWebsite, user, onToggleMobileSidebar }: TopbarProps) {
     }
   };
 
+  const resetRedux=()=>{
+    dispatch(clearAttributes())
+      dispatch(clearBrands())
+      dispatch(clearSegments())
+      dispatch(clearCategories())
+  }
   return (
     <header className="flex h-14 items-center justify-between border-b bg-background/80 px-8 backdrop-blur md:h-16 shadow-sm">
       <div className="flex items-center gap-2 md:gap-3">

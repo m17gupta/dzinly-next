@@ -1,37 +1,45 @@
 "use client";
 import { AppDispatch, RootState } from '@/store/store';
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { DataTableExt } from '@/components/admin/DataTableExt';
 import { removeAttribute } from '@/hooks/slices/attribute/AttributeSlice';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { MaterialAttributes } from '../types/attributeModel';
 
 const AttributeTable = () => {
+
   const { listAttribute, isAttributeLoading } = useSelector(
     (state: RootState) => state.attribute
+  );
+    const { listCategory,  } = useSelector(
+    (state: RootState) => state.category
   );
    const { currentWebsite } = useSelector((state: RootState) => state.websites);
   const dispatch = useDispatch<AppDispatch>();
   const { toast } = useToast();
   const router = useRouter();
 
+  const product_attribute = useMemo(() => {
+    if (
+      listCategory &&
+      listCategory.length &&
+      listAttribute &&
+      listAttribute.length > 0
+    ) {
+      return listAttribute.map(item => {
+        const catId = item.category_id;
+        const category = listCategory.find(cat => cat._id == catId)?.name
+        return {
+          ...item,
+          category: category
+        };
+      });
+    }
+    return [];
+  }, [listCategory, listAttribute]);
 
-    const product_attribute = useMemo(() => {
-      if (
-        currentWebsite &&
-        currentWebsite._id &&
-        listAttribute &&
-        listAttribute.length > 0
-      ) {
-        const list = listAttribute.filter(
-          (item) => item.websiteId === currentWebsite._id
-        );
-        
-        return list.length > 0 ? list : listAttribute;
-      }
-      return [];
-    }, [currentWebsite, listAttribute]);
   const handleDelete = async (row: any) => {
     const id = row?._id ?? row?.id;
     if (!id) {
@@ -69,7 +77,7 @@ const AttributeTable = () => {
     { key: '_id', label: 'ID', hidden: true },
     { key: 'id', label: 'ID', hidden: true },
     { key: 'name', label: 'Name' },
-    { key: 'type', label: 'Type' },
+
     { key: 'category', label: 'Category' },
     { key: 'createdAt', label: 'Created' },
   ];

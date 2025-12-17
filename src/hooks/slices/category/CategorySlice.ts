@@ -85,6 +85,8 @@ const categorySlice = createSlice({
     },
     clearCategories(state) {
       state.listCategory = [];
+      state.isCategoryLoading=false;
+      state.hasFetched=false
     },
   },
   extraReducers: (builder) => {

@@ -86,6 +86,8 @@ const attributeSlice = createSlice({
     },
     clearAttributes(state) {
       state.listAttribute = [];
+      state.hasFetched= false;
+      state.isAttributeLoading= false
     },
   },
   extraReducers: (builder) => {
@@ -96,6 +98,10 @@ const attributeSlice = createSlice({
       .addCase(
         fetchAttributes.fulfilled,
         (state, action: PayloadAction<MaterialAttributes[]>) => {
+          if(action.payload && action.payload.length){
+              state.listAttribute = action.payload;
+          state.hasFetched = true;
+          }
           state.listAttribute = action.payload;
           state.hasFetched = true;
         }

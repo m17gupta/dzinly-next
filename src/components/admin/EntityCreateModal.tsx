@@ -307,11 +307,14 @@ export default function EntityCreateModal({ entity }: Props) {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/40" onClick={close} />
-          <div className="relative z-10 w-full max-w-lg rounded bg-background p-6 shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">Create new {entity}</h2>
-            <form onSubmit={submit} className="space-y-4">
+          <div className="relative z-10 w-full max-w-lg max-h-[90vh] rounded bg-background shadow-lg flex flex-col">
+            <div className="px-6 pt-6 pb-4 border-b">
+              <h2 className="text-lg font-semibold">Create new {entity}</h2>
+            </div>
+            <form onSubmit={submit} className="flex flex-col flex-1 min-h-0">
+              <div className="px-6 py-4 space-y-4 overflow-y-auto flex-1">
               {entity === "category" ? (
                 <>
                   <div>
@@ -738,18 +741,19 @@ export default function EntityCreateModal({ entity }: Props) {
                   </div>
                 </>
               )}
+              </div>
 
-              {error && <div className="text-sm text-destructive">{error}</div>}
+              {error && <div className="px-6 py-2 text-sm text-destructive">{error}</div>}
 
-              <div className="flex items-center gap-2">
+              <div className="px-6 py-4 border-t flex items-center gap-2 bg-gray-50">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm text-white"
+                  className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm text-white hover:bg-primary/90 disabled:opacity-50"
                 >
                   {loading ? "Creating…" : "Create"}
                 </button>
-                <button type="button" className="text-sm" onClick={close}>
+                <button type="button" className="text-sm hover:underline" onClick={close}>
                   Cancel
                 </button>
               </div>

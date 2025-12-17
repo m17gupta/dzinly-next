@@ -9,6 +9,10 @@ import {
   setWebsites as setWebsitesAction,
   setCurrentWebsite as setCurrentWebsiteAction,
 } from "@/hooks/slices/websites/WebsiteSlice";
+import { clearAttributes } from "@/hooks/slices/attribute/AttributeSlice";
+import { clearBrands } from "@/hooks/slices/brand/BrandSlice";
+import { clearSegments } from "@/hooks/slices/segment/SegmentSlice";
+import { clearCategories } from "@/hooks/slices/category/CategorySlice";
 
 type AppShellClientProps = {
   children: React.ReactNode;
@@ -39,10 +43,14 @@ export function AppShellClient({
     }
   }, [dispatch, websites, initialCurrentWebsite]);
 
+  const resetRedux = () => {
+    dispatch(clearAttributes());
+    dispatch(clearBrands());
+    dispatch(clearSegments());
+    dispatch(clearCategories());
+  };
+
   const handleWebsiteChange = async (websiteId: string) => {
-    store.dispatch({ type: "pageEdit/resetState" });
-    store.dispatch({ type: "category/resetState" });
-    store.dispatch({ type: "brand/resetState" });
     const newWebsite = websites.find((w) => w._id === websiteId) || null;
     console.log("newWebsite", newWebsite);
     setCurrentWebsite(newWebsite);
@@ -59,9 +67,10 @@ export function AppShellClient({
         });
 
         if (response.ok) {
-          // Navigate to /admin and refresh the page to update server-side state
-          router.push("/admin");
-          router.refresh();
+          // Clear Redux state first to prevent old data from being used
+          resetRedux();
+          // Navigate to /admin (which will load fresh data for new website)
+          window.location.href = "/admin";
         } else {
           console.error("Failed to update website context");
           // Revert the optimistic update

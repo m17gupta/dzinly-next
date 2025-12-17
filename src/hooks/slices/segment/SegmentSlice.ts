@@ -83,6 +83,8 @@ const segmentSlice = createSlice({
     },
     clearSegments(state) {
       state.listSegment = [];
+      state.isSegmentLoading=false 
+      state.hasFetched= false
     },
   },
   extraReducers: (builder) => {
