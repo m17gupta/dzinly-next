@@ -88,7 +88,7 @@
   --primary-foreground: oklch(0.98 0.01 345); /* White text on primary */
 
   /* Secondary: Soft Champagne/Sand (Compliments Plum) */
-  --secondary: oklch(0.94 0.03 85);
+  --secondary: #293849;
   --secondary-foreground: oklch(0.429 0.126 345.26); /* Primary color text */
 
   /* Muted: Subtle Grays */

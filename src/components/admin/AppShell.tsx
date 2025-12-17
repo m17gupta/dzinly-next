@@ -122,6 +122,20 @@ type NavSection = {
 const currentWebsiteSections: NavSection[] = [
   {
     id: "website-overview",
+    label: "Overview",
+    items: [
+      { label: "Dashboard", href: "/admin/pages", icon: LayoutDashboard },
+      { label: "Analytics", href: "/admin/posts", icon: FileText, permission: "websites:update" },
+      { label: "Activity Log", href: "/admin/media", icon: Images, permission: "analytics:view" },
+      { label: "Notifications", href: "/admin/header", icon: RectangleHorizontal, permission: "security:read" },
+      { label: "System Health", href: "/admin/footer", icon: RectangleVertical, permission: "security:read" },
+      { label: "Quick Actions", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
+    ],
+  },
+
+
+  {
+    id: "website-overview",
     label: "Websites",
     items: [
       { label: "Pages", href: "/admin/pages", icon: LayoutDashboard },
@@ -130,8 +144,29 @@ const currentWebsiteSections: NavSection[] = [
       { label: "Header", href: "/admin/header", icon: RectangleHorizontal, permission: "security:read" },
       { label: "Footer", href: "/admin/footer", icon: RectangleVertical, permission: "security:read" },
       { label: "Navigation", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
+      { label: "Forms", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
+      { label: "Redirects", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
+      { label: "Domain Settings", href: "/admin/navigation", icon: Navigation, permission: "security:read" },
+
+
     ],
   },
+
+
+  {
+    id: "branding",
+    label: "Branding & Design",
+    items: [
+      { label: "Brand Profile", href: "/admin/branding/brand-profile", icon: BadgeCent, permission: ["content:read", "content:update", "content:delete"]  },
+      { label: "Logo", href: "/admin/branding/logo", icon: BadgeCent, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Colors", href: "/admin/branding/colors", icon: Palette, permission: ["content:read", "content:update", "content:delete"] },
+      { label: "Typography", href: "/admin/branding/typography", icon: Type, permission: ["content:read", "content:update", "content:delete"]  },
+      { label: "Layout Settings", href: "/admin/branding/layout-settings", icon: LayoutTemplate, permission: ["content:read", "content:update", "content:delete"]  },
+      { label: "Theme Presets", href: "/admin/branding/theme-presets", icon: LayoutTemplate, permission: ["content:read", "content:update", "content:delete"]  },
+    ],
+  },
+
+
   {
     id: "products",
     label: "Products",
@@ -143,17 +178,7 @@ const currentWebsiteSections: NavSection[] = [
       { label: "Attribute", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
     ],
   },
-  {
-    id: "branding",
-    label: "Branding & Design",
-    items: [
-      { label: "Logo", href: "/admin/logo", icon: BadgeCent, permission: "content:read" },
-      { label: "Color Pallet", href: "/admin/color-pallet", icon: Palette, permission: "content:read" },
-      { label: "Social Links", href: "/admin/social-links", icon: Share2, permission: "content:read" },
-      { label: "Layout Settings", href: "/admin/layout-settings", icon: LayoutTemplate, permission: "content:read" },
-      { label: "Typography", href: "/admin/typography", icon: Type, permission: "content:update" },
-    ],
-  },
+  
   {
     id: "domains",
     label: "Domain & Hosting",
