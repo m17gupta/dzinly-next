@@ -45,7 +45,7 @@ export default function RootClientPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button
               onClick={handleLogin}
-              className="group px-10 py-4 bg-white text-primary hover:bg-secondary hover:text-primary font-bold rounded-full transition-all shadow-[0_0_30px_rgba(0,0,0,0.2)] flex items-center gap-2"
+              className="group px-10 py-4 bg-white text-primary hover:bg-secondary hover:text-white font-bold rounded-full transition-all shadow-[0_0_30px_rgba(0,0,0,0.2)] flex items-center gap-2"
             >
               Go to Admin Dashboard <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
@@ -323,8 +323,8 @@ function Stat({ item, label }: { item: string, label: string }) {
 function FeatureCard({ icon, title, desc }: { icon: any, title: string, desc: string }) {
   return (
     <div className="p-8 rounded-[24px] bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-      <div className="w-14 h-14 bg-primary/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-        <div className="group-hover:text-white transition-colors">{icon}</div>
+      <div className="w-14 h-14 bg-primary/5 rounded-2xl flex items-center justify-center mb-6  hover:text-white transition-colors duration-300">
+        <div className="hover:text-white transition-colors hover:text-white">{icon}</div>
       </div>
       <h3 className="text-xl font-bold mb-3 text-foreground">{title}</h3>
       <p className="text-muted-foreground leading-relaxed text-sm">{desc}</p>
