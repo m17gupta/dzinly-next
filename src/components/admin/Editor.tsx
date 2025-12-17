@@ -241,7 +241,7 @@ export default function PageEditor({
         <div className="flex gap-3">
           {viewUrl && (
             <a
-              href={`//${viewUrl.item.primaryDomain[0]}${item.slug}`}
+              // href={`//${viewUrl.item.primaryDomain[0]}${item.slug}`}
               rel="noopener noreferrer"
               target="_blank"
               className="px-5 py-2.5 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700 text-white font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95 flex items-center gap-2"

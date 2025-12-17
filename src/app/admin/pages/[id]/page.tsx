@@ -23,6 +23,7 @@ export default async function PageDetail({
 
   const websiteId = cookies.get("current_website_id")?.value
 
+  
   const viewwebsiteurl = await fetch(`${baseUrl}/api/domain/website?id=${websiteId}`, {
     cache: "no-store",
   });

@@ -9,6 +9,7 @@ export default async function PagesAdmin() {
   const host = h.get("x-forwarded-host") ?? h.get("host");
   const proto = h.get("x-forwarded-proto") ?? "http";
   const baseUrl = `${proto}://${host}`;
+
   const res = await fetch(`${baseUrl}/api/pages`, { cache: "no-store", headers: { cookie } })
   if (!res.ok) {
     return <div className="text-sm text-red-600">Failed to load pages</div>

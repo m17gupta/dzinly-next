@@ -81,7 +81,7 @@ const TopToolbar: React.FC<TopToolbarProps> = ({
   return (
     <div className="flex items-center justify-between h-12 px-3 border-b border-slate-800 bg-slate-900">
       <Link href="/" className="mr-4 text-xl font-bold text-white">
-        WebBuilder
+        DzinlyNxt Web Builder
       </Link>
 
       <div className="flex items-center space-x-1.5">
