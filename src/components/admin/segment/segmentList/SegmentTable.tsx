@@ -28,7 +28,7 @@ const SegmentTable = () => {
       const list = listSegment.filter(
         (item) => item.websiteId === currentWebsite._id
       );
-      
+
       return list.length > 0 ? list : listSegment;
     }
     return [];
@@ -77,9 +77,61 @@ const SegmentTable = () => {
     { key: "_id", label: "ID", hidden: true },
     { key: "id", label: "ID", hidden: true },
     { key: "name", label: "Name" },
-    { key: "color", label: "Color" },
-    { key: "color_code", label: "Color Code" },
-    { key: "icon", label: "Icon" },
+    {
+      key: "color",
+      label: "Color",
+    },
+    {
+      key: "color_code",
+      label: "Color Code",
+      render: (value: any) => {
+        if (!value) return "-";
+        return (
+          <div className="flex items-center gap-2">
+            <div
+              className="w-6 h-6 rounded border border-gray-300"
+              style={{ backgroundColor: value }}
+              title={value}
+            />
+            <span className="text-xs font-mono">{value}</span>
+          </div>
+        );
+      },
+    },
+    {
+      key: "icon",
+      label: "Icon",
+      render: (value: any) => {
+        if (!value) return "-";
+        // If it's a URL to an image
+        if (
+          typeof value === "string" &&
+          (value.startsWith("http") || value.startsWith("/"))
+        ) {
+          return (
+            <img src={value} alt="icon" className="w-8 h-8 object-contain" />
+          );
+        }
+        return value;
+      },
+    },
+    {
+      key: "icon_svg",
+      label: "Icon SVG",
+      render: (value: any) => {
+        if (!value) return "-";
+        // If it's SVG code, render it directly
+        if (typeof value === "string" && value.includes("<svg")) {
+          return (
+            <div
+              className="w-8 h-8 flex items-center justify-center"
+              dangerouslySetInnerHTML={{ __html: value }}
+            />
+          );
+        }
+        return value;
+      },
+    },
     { key: "short_code", label: "Short Code" },
     { key: "is_active", label: "Active" },
     { key: "createdAt", label: "Created" },

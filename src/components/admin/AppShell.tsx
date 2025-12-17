@@ -175,7 +175,7 @@ const currentWebsiteSections: NavSection[] = [
       { label: "Category", href: "/admin/category", icon: Tags, permission: ["content:read", "content:update", "content:delete"] },
       { label: "Brand", href: "/admin/brand", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
       { label: "Segment", href: "/admin/segment", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
-      { label: "Attribute", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
+      // { label: "Attribute", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
       { label: "Styles", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
       { label: "Tags", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },
       { label: "Attributes", href: "/admin/attribute", icon: Building2, permission: ["content:read", "content:update", "content:delete"] },

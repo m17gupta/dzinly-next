@@ -30,7 +30,7 @@ const AttributeTable = () => {
     ) {
       return listAttribute.map(item => {
         const catId = item.category_id;
-        const category = listCategory.find(cat => cat._id == catId)?.name
+        const category = listCategory.find(cat => cat._id == catId)
         return {
           ...item,
           category: category
