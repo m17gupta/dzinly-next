@@ -4,8 +4,11 @@ import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell, Website, User } from "./AppShell";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
-import { setWebsites as setWebsitesAction, setCurrentWebsite as setCurrentWebsiteAction } from "@/hooks/slices/websites/WebsiteSlice";
+import { AppDispatch, store } from "@/store/store";
+import {
+  setWebsites as setWebsitesAction,
+  setCurrentWebsite as setCurrentWebsiteAction,
+} from "@/hooks/slices/websites/WebsiteSlice";
 
 type AppShellClientProps = {
   children: React.ReactNode;
@@ -37,32 +40,35 @@ export function AppShellClient({
   }, [dispatch, websites, initialCurrentWebsite]);
 
   const handleWebsiteChange = async (websiteId: string) => {
-    console.log("websiteId",websiteId)
-    const newWebsite = websites.find(w => w._id === websiteId) || null;
-       console.log("newWebsite",newWebsite)
+    store.dispatch({ type: "pageEdit/resetState" });
+    store.dispatch({ type: "category/resetState" });
+    store.dispatch({ type: "brand/resetState" });
+    const newWebsite = websites.find((w) => w._id === websiteId) || null;
+    console.log("newWebsite", newWebsite);
     setCurrentWebsite(newWebsite);
 
     startTransition(async () => {
       try {
         // Call API to update the current website cookie
-        const response = await fetch('/api/session/website', {
-          method: 'POST',
+        const response = await fetch("/api/session/website", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ websiteId }),
         });
 
         if (response.ok) {
-          // Refresh the page to update server-side state
+          // Navigate to /admin and refresh the page to update server-side state
+          router.push("/admin");
           router.refresh();
         } else {
-          console.error('Failed to update website context');
+          console.error("Failed to update website context");
           // Revert the optimistic update
           setCurrentWebsite(initialCurrentWebsite);
         }
       } catch (error) {
-        console.error('Error updating website context:', error);
+        console.error("Error updating website context:", error);
         // Revert the optimistic update
         setCurrentWebsite(initialCurrentWebsite);
       }
