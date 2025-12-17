@@ -682,7 +682,7 @@ function Topbar({ currentWebsite, user, onToggleMobileSidebar }: TopbarProps) {
             <Menu className="h-4 w-4" />
           </Button>
         </div>
-        <div className="hidden text-sm font-medium text-muted-foreground md:inline">
+        <div className="hidden text-sm font-medium text-black md:inline">
           Dashboard
         </div>
 
