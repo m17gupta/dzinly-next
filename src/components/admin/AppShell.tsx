@@ -39,16 +39,16 @@ import {
   UserPlus,
   History,
   KeyRound,
-  ImagePlus, 
-  ScanSearch, 
-  Paintbrush, 
+  ImagePlus,
+  ScanSearch,
+  Paintbrush,
   Bot,
-  Network ,
-  Compass ,
+  Network,
+  Compass,
   Tag,
-  Terminal, 
-  Heart, 
-  GalleryVerticalEnd, 
+  Terminal,
+  Heart,
+  GalleryVerticalEnd,
   Cpu,
   Image as ImageIcon,
   Megaphone,
@@ -77,23 +77,26 @@ import {
   SwatchBook,
 
 
-  BarChart3, 
+  BarChart3,
 
-  HeartPulse, 
+  HeartPulse,
 
-  FileCode2, 
-  Newspaper, 
+  FileCode2,
+  Newspaper,
 
-  PanelTop, 
-  PanelBottom, 
+  PanelTop,
+  PanelBottom,
 
-  ClipboardList, 
-  ArrowLeftRight, 
+  ClipboardList,
+  ArrowLeftRight,
+  ChevronsUpDown,
+  User,
+  LogOut,
 
 
 
 } from "lucide-react";
-import { FaChevronCircleLeft,FaChevronCircleRight } from "react-icons/fa";
+import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -125,7 +128,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { signOut } from "next-auth/react";
 import { useDispatch } from "react-redux";
@@ -134,6 +137,10 @@ import { clearAttributes } from "@/hooks/slices/attribute/AttributeSlice";
 import { clearBrands } from "@/hooks/slices/brand/BrandSlice";
 import { clearSegments } from "@/hooks/slices/segment/SegmentSlice";
 import { clearCategories } from "@/hooks/slices/category/CategorySlice";
+
+import { GoSidebarCollapse } from "react-icons/go";
+import { GoSidebarExpand } from "react-icons/go";
+import { Input } from "../ui/input";
 
 // ---------------------------------------------------------------------------
 // Types & interfaces
@@ -260,44 +267,45 @@ const currentWebsiteSections: NavSection[] = [
     id: "branding",
     label: "Branding & Design",
     items: [
-      { 
-        label: "Brand Profile", 
-        href: "/admin/branding/brand-profile", 
-        icon: LayoutGrid, 
-        permission: ["content:read", "content:update", "content:delete"] 
+      {
+        label: "Brand Profile",
+        href: "/admin/branding/brand-profile",
+        icon: LayoutGrid,
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Logo",
         href: "/admin/branding/logo",
         icon: Image,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Colors",
         href: "/admin/branding/colors",
         icon: Palette,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Typography",
         href: "/admin/branding/typography",
         icon: Type,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Layout Settings",
         href: "/admin/branding/layout-settings",
         icon: LayoutTemplate,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Theme Presets",
         href: "/admin/branding/theme-presets",
         icon: SwatchBook,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
     ],
   },
+
 
   {
     id: "products",
@@ -307,61 +315,61 @@ const currentWebsiteSections: NavSection[] = [
         label: "Products",
         href: "/admin/products",
         icon: Package,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Category",
         href: "/admin/category",
         icon: LayoutGrid,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Brand",
         href: "/admin/brand",
         icon: Award,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Segment",
         href: "/admin/segment",
         icon: Layers,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Attribute",
         href: "/admin/attribute",
         icon: ListTree,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Styles",
         href: "/admin/styles",
         icon: Palette,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Tags",
         href: "/admin/tags",
         icon: Hash,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Attributes",
         href: "/admin/attributes-list",
         icon: Component,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Variants",
         href: "/admin/variants",
         icon: Boxes,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Pricing Rules",
         href: "/admin/pricing-rules",
         icon: CircleDollarSign,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
     ],
   },
@@ -374,61 +382,61 @@ const currentWebsiteSections: NavSection[] = [
         label: "Orders",
         href: "/admin/ecommerce/orders",
         icon: ShoppingBag,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Customers",
         href: "/admin/ecommerce/customers",
         icon: Users,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Reports",
         href: "/admin/ecommerce/reports",
         icon: BarChart4,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Abandoned Carts",
         href: "/admin/ecommerce/abandoned-carts",
         icon: ShoppingCart,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Subscriptions",
         href: "/admin/ecommerce/subscriptions",
         icon: RefreshCcw,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Taxes",
         href: "/admin/ecommerce/taxes",
         icon: ReceiptIndianRupee,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Shipping",
         href: "/admin/ecommerce/shipping",
         icon: Truck,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Payments",
         href: "/admin/ecommerce/payments",
         icon: CreditCard,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Invoices",
         href: "/admin/ecommerce/invoices",
         icon: FileText,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Settings",
         href: "/admin/ecommerce/settings",
         icon: Settings,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
     ],
   },
@@ -441,162 +449,107 @@ const currentWebsiteSections: NavSection[] = [
         label: "Banners",
         href: "/admin/marketing/banners",
         icon: ImageIcon,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Campaigns",
         href: "/admin/marketing/campaigns",
         icon: Megaphone,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Catalog Generation",
         href: "/admin/marketing/catalog-generation",
         icon: BookOpen,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Quotations",
         href: "/admin/marketing/quotations",
         icon: FileText,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Coupons",
         href: "/admin/marketing/coupons",
         icon: TicketPercent,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Email Templates",
         href: "/admin/marketing/email-templates",
         icon: MailPlus,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Integrations",
         href: "/admin/marketing/integrations",
         icon: Share2,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Automation Rules",
         href: "/admin/marketing/automation-rules",
         icon: Zap,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
     ],
-},
-
-  {
-      id: "ai-studio",
-      label: "AI Studio", 
-      items: [
-        { 
-          label: "Image Uploads", 
-          href: "/admin/ai-studio/image-uploads", 
-          icon: ImagePlus, 
-          permission: ["content:read", "content:update", "content:delete"] 
-        },
-        { 
-          label: "Segment Detection", 
-          href: "/admin/ai-studio/segment-detection", 
-          icon: ScanSearch, 
-          permission: ["content:read", "content:update", "content:delete"] 
-        },
-        { 
-          label: "Material Application", 
-          href: "/admin/ai-studio/material-application", 
-          icon: Paintbrush, 
-          permission: ["content:read", "content:update", "content:delete"] 
-        },
-        { 
-          label: "Prompt Library", 
-          href: "/admin/ai-studio/prompt-library", 
-          icon: Terminal, 
-          permission: ["content:read", "content:update", "content:delete"] 
-        },
-        { 
-          label: "Render History", 
-          href: "/admin/ai-studio/render-history", 
-          icon: History, 
-          permission: ["content:read", "content:update", "content:delete"] 
-        },
-        { 
-          label: "Saved Designs", 
-          href: "/admin/ai-studio/saved-designs", 
-          icon: Heart, 
-          permission: ["content:read", "content:update", "content:delete"] 
-        },
-        { 
-          label: "Reference Images", 
-          href: "/admin/ai-studio/reference-images", 
-          icon: GalleryVerticalEnd, 
-          permission: ["content:read", "content:update", "content:delete"] 
-        },
-        { 
-          label: "AI Settings", 
-          href: "/admin/ai-studio/ai-settings", 
-          icon: Cpu, 
-          permission: ["content:read", "content:update", "content:delete"] 
-        },
-      ],
   },
 
-  // {
-  //   id: "ai-studio",
-  //   label: "AI Studio",
-  //   items: [
-  //     {
-  //       label: "Image Uploads",
-  //       href: "/admin/ai-studio/banners",
-  //       icon: ImagePlus,
-  //       permission: ["content:read", "content:update", "content:delete"],
-  //     },
-  //     {
-  //       label: "Segment Detection",
-  //       href: "/admin/ai-studio/campaigns",
-  //       icon: ScanSearch,
-  //       permission: ["content:read", "content:update", "content:delete"],
-  //     },
-  //     {
-  //       label: "Material Application",
-  //       href: "/admin/ai-studio/catalog-generation",
-  //       icon: Paintbrush,
-  //       permission: ["content:read", "content:update", "content:delete"],
-  //     },
-  //     {
-  //       label: "Prompt Library",
-  //       href: "/admin/ai-studio/quotations",
-  //       icon: Terminal,
-  //       permission: ["content:read", "content:update", "content:delete"],
-  //     },
-  //     {
-  //       label: "Render History",
-  //       href: "/admin/ai-studio/coupons",
-  //       icon: History,
-  //       permission: ["content:read", "content:update", "content:delete"],
-  //     },
-  //     {
-  //       label: "Saved Designs",
-  //       href: "/admin/ai-studio/email-templates",
-  //       icon: Heart,
-  //       permission: ["content:read", "content:update", "content:delete"],
-  //     },
-  //     {
-  //       label: "Reference Images",
-  //       href: "/admin/ai-studio/integrations",
-  //       icon: GalleryVerticalEnd,
-  //       permission: ["content:read", "content:update", "content:delete"],
-  //     },
-  //     {
-  //       label: "AI Settings",
-  //       href: "/admin/ai-studio/automation-rules",
-  //       icon: Cpu,
-  //       permission: ["content:read", "content:update", "content:delete"],
-  //     },
-  //   ],
-  // },
+  {
+    id: "ai-studio",
+    label: "AI Studio",
+    items: [
+      {
+        label: "Image Uploads",
+        href: "/admin/ai-studio/image-uploads",
+        icon: ImagePlus,
+        permission: ["content:read", "content:update", "content:delete"]
+      },
+      {
+        label: "Segment Detection",
+        href: "/admin/ai-studio/segment-detection",
+        icon: ScanSearch,
+        permission: ["content:read", "content:update", "content:delete"]
+      },
+      {
+        label: "Material Application",
+        href: "/admin/ai-studio/material-application",
+        icon: Paintbrush,
+        permission: ["content:read", "content:update", "content:delete"]
+      },
+      {
+        label: "Prompt Library",
+        href: "/admin/ai-studio/prompt-library",
+        icon: Terminal,
+        permission: ["content:read", "content:update", "content:delete"]
+      },
+      {
+        label: "Render History",
+        href: "/admin/ai-studio/render-history",
+        icon: History,
+        permission: ["content:read", "content:update", "content:delete"]
+      },
+      {
+        label: "Saved Designs",
+        href: "/admin/ai-studio/saved-designs",
+        icon: Heart,
+        permission: ["content:read", "content:update", "content:delete"]
+      },
+      {
+        label: "Reference Images",
+        href: "/admin/ai-studio/reference-images",
+        icon: GalleryVerticalEnd,
+        permission: ["content:read", "content:update", "content:delete"]
+      },
+      {
+        label: "AI Settings",
+        href: "/admin/ai-studio/ai-settings",
+        icon: Cpu,
+        permission: ["content:read", "content:update", "content:delete"]
+      },
+    ],
+  },
 
   {
     id: "users",
@@ -606,37 +559,37 @@ const currentWebsiteSections: NavSection[] = [
         label: "All Users",
         href: "/admin/users/all-users",
         icon: Users,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Roles & Permissions",
         href: "/admin/users/roles-permissions",
         icon: Fingerprint,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Teams",
         href: "/admin/users/teams",
         icon: UsersRound,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Invitations",
         href: "/admin/users/invitations",
         icon: UserPlus,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "Activity Logs",
         href: "/admin/users/activity-logs",
         icon: History,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
       {
         label: "API Access",
         href: "/admin/users/api-access",
         icon: KeyRound,
-        permission: ["content:read", "content:update", "content:delete"],
+        permission: ["content:read", "content:update", "content:delete"]
       },
     ],
   },
@@ -823,22 +776,18 @@ function Sidebar({
             )}
           >
             <div className="flex h-full flex-col">
-              <div className="border-b pb-4">
+              <div className="border-b pb-4 ">
                 {/* Brand row */}
+                <div className="flex justify-between items-center">
                 <div className={cn("px-4 pt-4 pb-0", collapsed && "px-3")}>
                   <div className="flex items-center gap-3">
                     <div className="grid h-10 w-10 place-items-center rounded-md">
-                      <img
-                        src="../dzinly-favicon.svg"
-                        className="w-10 h-10"
-                      ></img>
+                      <img src="../dzinly-favicon.svg" className="w-10 h-10"></img>
                     </div>
                     {!collapsed && (
                       <div className="leading-tight">
                         <div className="text-sm font-semibold">Dzinly</div>
-                        <div className="text-[11px] text-black/45">
-                          Admin panel
-                        </div>
+                        <div className="text-[11px] text-black/45">Admin panel</div>
                       </div>
                     )}
                   </div>
@@ -851,36 +800,81 @@ function Sidebar({
                       value={currentWebsite?._id || ""}
                       onValueChange={onWebsiteChange}
                     >
+                      {/* Trigger */}
                       <SelectTrigger
-                        className={cn(
-                          "py-6 w-full rounded-md bg-white text-start shadow",
-                          collapsed && "justify-start px-2"
-                        )}
-                      >
-                        {!collapsed ? (
-                          <SelectValue placeholder="Select website" />
-                        ) : (
-                          <Globe2 className="h-4 w-4 text-black/70" />
-                        )}
-                      </SelectTrigger>
-                      <SelectContent>
-                        {websites.map((site) => (
+                          className={cn(
+                            "h-12 w-full rounded-md bg-white shadow border border-black/5",
+                            "flex items-center justify-between px-3",
+                            "[&>svg]:hidden", // 👈 DEFAULT SELECT ICON REMOVED
+                            collapsed && "justify-center px-2"
+                          )}
+                        >
+                          {!collapsed ? (
+
+                            
+                            <div className="flex items-center gap-2">
+
+                               
+
+                              {/* Your custom icon */}
+                              <ChevronsUpDown className="h-4 w-4 text-black/50" />
+                            </div>
+                          ) : (
+                            <Globe2 className="h-4 w-4 text-black/70" />
+                          )}
+                        </SelectTrigger>
+
+
+                      {/* Dropdown */}
+                      <SelectContent className="w-[260px] rounded-lg border shadow-lg">
+                        <div className="px-3 py-2 text-xs font-medium text-muted-foreground">
+                          Websites
+                        </div>
+
+                        {websites.map((site, index) => (
                           <SelectItem key={site._id} value={site._id}>
-                            <div className="flex flex-col">
-                              <span className="text-xs font-medium uppercase">
-                                {site.name}
-                              </span>
-                              <span className="text-[11px] text-muted-foreground">
-                                {site.primaryDomain || site.systemSubdomain}
-                              </span>
+                            <div className="flex items-center justify-between w-full">
+                              <div className="flex items-center gap-2">
+                                <div className="h-7 w-7 rounded-md border bg-white flex items-center justify-center">
+                                  <Globe2 className="h-4 w-4 text-black/60" />
+                                </div>
+
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-medium">{site.name}</span>
+                                  <span className="text-[11px] text-muted-foreground">
+                                    {site.primaryDomain || site.systemSubdomain}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Shortcut hint (UI only) */}
+                              {/* <span className="text-[11px] text-muted-foreground">
+                                ⌘{index + 1}
+                              </span> */}
                             </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
+
                 )}
+                </div>
+
+                <div className="flex flex-col leading-tight text-left ms-3 me-3 bg-white shadow-sm rounded-sm px-3 py-2 mt-4">
+                                  <span className="text-xs font-medium">
+                                    {currentWebsite?.name || "Select website"}
+                                  </span>
+                                  <span className="text-[11px] text-muted-foreground">
+                                    {currentWebsite?.primaryDomain ||
+                                      currentWebsite?.systemSubdomain ||
+                                      ""}
+                                  </span>
+                                </div>
+
               </div>
+
+                                
 
               <ScrollArea
                 className={cn("mt-3 flex-1 px-2 pb-3", collapsed && "px-2")}
@@ -913,14 +907,14 @@ function Sidebar({
                             <Tooltip delayDuration={150}>
                               <TooltipTrigger asChild>
                                 <button
-                                  type="button" 
+                                  type="button"
                                   className={cn(
                                     "w-full flex items-center justify-center",
                                     "h-11 rounded-md bg-white/70 hover:bg-white transition",
                                     "border border-black/5 shadow-sm"
                                   )}
                                 >
-                                 <HeaderIcon className="h-5 w-5 text-black/70" />
+                                  <HeaderIcon className="h-5 w-5 text-black/70" />
                                 </button>
                               </TooltipTrigger>
                               <TooltipContent side="right">
@@ -1011,7 +1005,7 @@ function Sidebar({
                             )}
                           >
                             <div className="grid h-9 w-9 place-items-center rounded-md bg-white border shadow-sm">
-                              <HeaderIcon className="h-4 w-4 text-black/70 "/>
+                              <HeaderIcon className="h-4 w-4 text-black/70 " />
                             </div>
 
                             <div className="flex-1">
@@ -1099,28 +1093,88 @@ function Sidebar({
               </ScrollArea>
 
               {/* collapse button */}
-             <div className="border-t border-black/10 p-3">
-              <Button
-                variant="ghost"
+              <div className="border-t border-black/10 p-3">
+               
 
-                className="w-full rounded-md justify-between bg-white/60 hover:bg-white border border-black/5 shadow-sm text-black/70"
-                onClick={onToggleCollapse}
+           <div className="mt-4">
+            <DropdownMenu>
+              {/* TRIGGER */}
+              <DropdownMenuTrigger asChild>
+                <button className="flex w-full items-center gap-3 rounded-md px-3 py-2 hover:bg-muted">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback>SC</AvatarFallback>
+                  </Avatar>
+
+                  <div className="flex flex-col flex-1 text-left leading-tight">
+                    <span className="text-sm font-medium">shadcn</span>
+                    <span className="text-xs text-muted-foreground">
+                      m@example.com
+                    </span>
+                  </div>
+
+                  <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
+                </button>
+              </DropdownMenuTrigger>
+
+              {/* ✅ DROPDOWN OPENS OUTSIDE SIDEBAR */}
+              <DropdownMenuContent
+                side="right"          // 👈 sidebar se bahar
+                align="start"         // 👈 top align
+                sideOffset={12}       // 👈 gap
+                className="w-56 rounded-xl shadow-xl mb-2"
               >
-                {!collapsed && (
-                  <>
-                    <span className="text-xs font-medium">Collapse</span>
-                    <FaChevronCircleLeft className="h-8 w-8" />
-                  </>
-                )}
+                {/* Header */}
+                <DropdownMenuLabel className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback>SC</AvatarFallback>
+                  </Avatar>
 
-                {collapsed && (
-                  <>
-                    <span className="text-xs font-medium">Expand</span>
-                    <FaChevronCircleRight className="h-8 w-8" />
-                  </>
-                )}
-              </Button>
-            </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">shadcn</span>
+                    <span className="text-xs text-muted-foreground">
+                      m@example.com
+                    </span>
+                  </div>
+                </DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Upgrade to Pro
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  Account
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Billing
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  <Bell className="mr-2 h-4 w-4" />
+                  Notifications
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem className="text-red-600 focus:text-red-600">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+
+
+
+              </div>
 
             </div>
           </div>
@@ -1224,7 +1278,7 @@ function MobileSidebar({
                   >
                     <div className="flex items-center gap-3">
                       <div className="grid h-9 w-9 place-items-center rounded-md bg-background border">
-                       <LayoutGrid className="h-4 w-4 text-black/70" />
+                        <LayoutGrid className="h-4 w-4 text-black/70" />
 
                       </div>
                       <div className="text-sm font-semibold">
@@ -1313,9 +1367,11 @@ type TopbarProps = {
   currentWebsite: Website | null;
   user: User | null;
   onToggleMobileSidebar: () => void;
+  collapsed: boolean;
+  onToggleCollapse: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-function Topbar({ currentWebsite, user, onToggleMobileSidebar }: TopbarProps) {
+function Topbar({ currentWebsite, user, onToggleMobileSidebar, collapsed, onToggleCollapse }: TopbarProps) {
   const dispatch = useDispatch();
 
   const handleSignOut = async () => {
@@ -1340,24 +1396,47 @@ function Topbar({ currentWebsite, user, onToggleMobileSidebar }: TopbarProps) {
   };
 
   const resetRedux = () => {
-    dispatch(clearAttributes());
-    dispatch(clearBrands());
-    dispatch(clearSegments());
-    dispatch(clearCategories());
-  };
+    dispatch(clearAttributes())
+    dispatch(clearBrands())
+    dispatch(clearSegments())
+    dispatch(clearCategories())
+  }
+  // Removed duplicate onToggleCollapse function to avoid identifier conflict.
+
   return (
     <header className="flex h-14 items-center justify-between border-b bg-background/80 px-8 backdrop-blur md:h-16 shadow-sm">
       <div className="flex items-center gap-2 md:gap-3">
-        <div className="md:hidden">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-8 w-8"
-            onClick={onToggleMobileSidebar}
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
-        </div>
+      {/* SIDEBAR COLLAPSE BUTTON */}
+<div className="border-none border-black/10 p-3">
+  <Button
+    variant="ghost"
+    onClick={onToggleCollapse}
+    // size={"xl"}
+    className={cn(
+      "w-full justify-between  hover:bg-transparent",
+      "border-e border-black/5 bg-transparent rounded-none  text-black/70 "
+    )}
+  >
+    {!collapsed ? (
+      <>
+        {/* <span className="text-xs font-medium">Collapse</span> */}
+        {/* <FaChevronCircleLeft className="h-6 w-6" /> */}
+        <GoSidebarExpand className="h-14 w-14 " size={48}/>
+
+      </>
+    ) : (
+      <>
+        {/* <span className="sr-only">Expand</span> */}
+        {/* <FaChevronCircleRight  /> */}
+        <GoSidebarCollapse className="h-14 w-14  mx-auto" size={48}/>
+
+      </>
+    )}
+  </Button>
+</div>
+
+
+        
         <div className="hidden text-sm font-medium text-black md:inline">
           Dashboard
         </div>
@@ -1376,14 +1455,18 @@ function Topbar({ currentWebsite, user, onToggleMobileSidebar }: TopbarProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="hidden text-xs sm:inline-flex"
-        >
-          <Search className="h-3 w-3 mr-1" />
-          Search
-        </Button>
+        
+        <div className="relative w-full max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black/60" />
+
+          <Input
+            type="search"
+            placeholder="Search"
+            className=" pl-9 h-8 bg-white/70  border border-black/10 rounded-sm focus-visible:ring-1"
+          />
+        </div>
+
+
         <Button variant="outline" size="icon" className="h-8 w-8">
           <Bell className="h-4 w-4" />
         </Button>
@@ -1440,10 +1523,14 @@ export function AppShell({
   websites = [],
   currentWebsite = null,
   user = null,
-  onWebsiteChange = () => {},
+  onWebsiteChange = () => { },
 }: AppShellProps) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+
+
+
+  
 
   return (
     <div className="flex min-h-screen bg-[#e8e9eb] text-foreground overflow-hidden">
@@ -1461,6 +1548,8 @@ export function AppShell({
           currentWebsite={currentWebsite}
           user={user}
           onToggleMobileSidebar={() => setMobileSidebarOpen(true)}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={(event) => setSidebarCollapsed((prev) => !prev)}
         />
         <main className="flex-1 px-3 py-4 md:px-6 md:py-6 overflow-auto">
           <div className="mx-auto max-w-7xl">{children}</div>
