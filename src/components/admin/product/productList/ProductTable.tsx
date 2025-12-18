@@ -1,11 +1,20 @@
 "use client";
 import { AppDispatch, RootState } from "@/store/store";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataTableExt } from "@/components/admin/DataTableExt";
 import { removeProduct } from "@/hooks/slices/product/ProductSlice";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import ProductForm from "../forms/ProductForm";
+import { ProductModel } from "../type/ProductModel";
+import { Button } from "@/components/ui/button";
 
 const ProductTable = () => {
   const { listProduct, isProductLoading } = useSelector(
@@ -18,6 +27,11 @@ const ProductTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { toast } = useToast();
   const router = useRouter();
+
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<ProductModel | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isSaving, setIsSaving] = useState(false);
 
   const products = useMemo(() => {
     if (listProduct && listProduct.length > 0) {
@@ -80,8 +94,59 @@ const ProductTable = () => {
   const handleView = (row: any) => {
     const id = row?._id ?? row?.id;
     if (!id) return;
-    // navigate to edit/view page under admin
-    router.push(`/admin/products/${id}`);
+    setEditingProduct(row);
+    setFieldErrors({});
+    setIsEditDialogOpen(true);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingProduct) return;
+    
+    setFieldErrors({});
+    const errors: Record<string, string> = {};
+    
+    if (!editingProduct.name?.trim()) {
+      errors.name = 'Name is required';
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    
+    setIsSaving(true);
+    try {
+      const id = (editingProduct as any)._id ?? editingProduct.id;
+      const { _id, ...updateData } = editingProduct as any;
+      
+      const res = await fetch(`/api/admin/products`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...updateData, id }),
+      });
+      
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || `HTTP ${res.status}`);
+      }
+      
+      toast({ 
+        title: 'Updated', 
+        description: `Product ${editingProduct.name} updated successfully` 
+      });
+      setIsEditDialogOpen(false);
+      setEditingProduct(null);
+      window.location.reload();
+    } catch (err: any) {
+      console.error('Failed to update product', err);
+      toast({ 
+        title: 'Update failed', 
+        description: String(err?.message || err),
+        variant: 'destructive'
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const initialColumns = [
@@ -111,16 +176,65 @@ const ProductTable = () => {
   ];
 
   return (
-    <div>
-      <DataTableExt
-        title="Products"
-        data={products ?? []}
-        createHref="/admin/products/create"
-        initialColumns={initialColumns}
-        onDelete={(row) => handleDelete(row)}
-        onView={(row) => handleView(row)}
-      />
-    </div>
+    <>
+      <div>
+        <DataTableExt
+          title="Products"
+          data={products ?? []}
+          createHref="/admin/products/create"
+          initialColumns={initialColumns}
+          onDelete={(row) => handleDelete(row)}
+          onView={(row) => handleView(row)}
+        />
+      </div>
+
+      {/* Edit Product Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Product</DialogTitle>
+          </DialogHeader>
+          
+          {editingProduct && (
+            <div className="space-y-4">
+              <ProductForm
+                product={editingProduct}
+                setProduct={(value) => {
+                  if (typeof value === 'function') {
+                    setEditingProduct(prev => prev ? value(prev) : null);
+                  } else {
+                    setEditingProduct(value);
+                  }
+                }}
+                fieldErrors={fieldErrors}
+                filterCategory={listCategory}
+                listBrand={listBrand}
+                listSegment={listSegment}
+              />
+              
+              <div className="flex justify-end gap-2 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsEditDialogOpen(false);
+                    setEditingProduct(null);
+                  }}
+                  disabled={isSaving}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSaveEdit}
+                  disabled={isSaving}
+                >
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

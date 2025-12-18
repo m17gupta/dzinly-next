@@ -1,11 +1,20 @@
 "use client";
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { DataTableExt } from '../../DataTableExt';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import BrandForm from '../forms/BrandForm';
+import { MaterialBrandModel } from '../types/brandModel';
+import { Button } from '@/components/ui/button';
 
 const BrandTable = () => {
     const { listBrand, isBrandLoading } = useSelector(
@@ -15,6 +24,12 @@ const BrandTable = () => {
     const { toast } = useToast();
   const router = useRouter();
  const { currentWebsite } = useSelector((state: RootState) => state.websites);
+  
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingBrand, setEditingBrand] = useState<MaterialBrandModel | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isSaving, setIsSaving] = useState(false);
+  
   const product_brand = useMemo(() => {
       if (
         currentWebsite &&
@@ -57,11 +72,72 @@ const BrandTable = () => {
     }
   };
 
-  const handleView = (row: any) => {
+  const handleEdit = (row: any) => {
     const id = row?._id ?? row?.id;
     if (!id) return;
-    // navigate to edit/view page under admin
-    router.push(`/admin/brand/${id}`);
+    
+    // Set the brand data for editing
+    setEditingBrand(row);
+    setFieldErrors({});
+    setIsEditDialogOpen(true);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingBrand) return;
+    
+    setFieldErrors({});
+    const errors: Record<string, string> = {};
+    
+    if (!editingBrand.name?.trim()) {
+      errors.name = 'Name is required';
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    
+    setIsSaving(true);
+    try {
+      const id = (editingBrand as any)._id ?? editingBrand.id;
+      
+      // Remove _id from the payload to avoid immutable field error
+      const { _id, ...updateData } = editingBrand as any;
+      
+      const res = await fetch(`/api/admin/brand`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...updateData, id }),
+      });
+      
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || `HTTP ${res.status}`);
+      }
+      
+      toast({ 
+        title: 'Updated', 
+        description: `Brand ${editingBrand.name} updated successfully` 
+      });
+      setIsEditDialogOpen(false);
+      setEditingBrand(null);
+      
+      // Refresh the data
+      window.location.reload();
+    } catch (err: any) {
+      console.error('Failed to update brand', err);
+      toast({ 
+        title: 'Update failed', 
+        description: String(err?.message || err),
+        variant: 'destructive'
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleLogoFile = (file?: File) => {
+    // Handle logo file upload if needed
   };
 
   const initialColumns = [
@@ -87,14 +163,63 @@ const BrandTable = () => {
     { key: 'updated_at', label: 'Updated' },
   ];
   return (
-    <div> <DataTableExt
-            title="Brands"
-            data={product_brand ?? []}
-            createHref="/admin/brand/create"
-            initialColumns={initialColumns}
-            onDelete={(row) => handleDelete(row)}
-            onView={(row) => handleView(row)}
-          /></div>
+    <>
+      <div>
+        <DataTableExt
+          title="Brands"
+          data={product_brand ?? []}
+          createHref="/admin/brand/create"
+          initialColumns={initialColumns}
+          onDelete={(row) => handleDelete(row)}
+          onView={(row) => handleEdit(row)}
+        />
+      </div>
+
+      {/* Edit Brand Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Brand</DialogTitle>
+          </DialogHeader>
+          
+          {editingBrand && (
+            <div className="space-y-4">
+              <BrandForm
+                brand={editingBrand}
+                setBrand={(value) => {
+                  if (typeof value === 'function') {
+                    setEditingBrand(prev => prev ? value(prev) : null);
+                  } else {
+                    setEditingBrand(value);
+                  }
+                }}
+                fieldErrors={fieldErrors}
+                handleLogoFile={handleLogoFile}
+              />
+              
+              <div className="flex justify-end gap-2 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsEditDialogOpen(false);
+                    setEditingBrand(null);
+                  }}
+                  disabled={isSaving}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSaveEdit}
+                  disabled={isSaving}
+                >
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
 

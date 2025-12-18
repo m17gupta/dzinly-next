@@ -299,7 +299,7 @@ export function DataTableExt({
     setPage(1);
   }
 
-  function handleView(e: React.MouseEvent, row: any) {
+  function handleEdit(e: React.MouseEvent, row: any) {
     e.stopPropagation();
     if (onView) {
       onView(row);
@@ -631,7 +631,7 @@ export function DataTableExt({
                         variant="ghost"
                         size="sm"
                         className="h-8 w-8 p-0"
-                        onClick={(e) => handleView(e, row)}
+                        onClick={(e) => handleEdit(e, row)}
                         title="View"
                       >
                         <Edit2 className="h-4 w-4" />
