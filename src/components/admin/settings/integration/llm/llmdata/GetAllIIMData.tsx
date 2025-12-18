@@ -1,0 +1,26 @@
+import { fetchLLMSettings } from '@/hooks/slices/setting/llmSetting/LLMSettingSlice';
+import { AppDispatch, RootState } from '@/store/store';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+
+const GetAllIIMData = () => {
+  const { isLLMSettingLoading, hasFetched } = useSelector(
+    (state: RootState) => state.llmSetting
+  );
+  const { user } = useSelector((state: RootState) => state.user);
+  const { currentWebsite } = useSelector((state: RootState) => state.websites);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (!hasFetched && 
+      !isLLMSettingLoading &&
+    currentWebsite &&
+  currentWebsite._id) {
+      dispatch(fetchLLMSettings({websiteId:currentWebsite._id}));
+    }
+  }, [hasFetched, isLLMSettingLoading, user,dispatch,currentWebsite]);
+
+  return null;
+}
+
+export default GetAllIIMData

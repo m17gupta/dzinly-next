@@ -8,8 +8,6 @@ import { AppDispatch, RootState } from "@/store/store";
 import { savePageThunk } from "./slices/pageEditSlice";
 import { toast } from "sonner";
 
-
-
 // Improved type definition for GrapesJS editor
 interface GrapesJSEditor {
   getHtml: () => string;
@@ -95,9 +93,9 @@ export function useEditor(containerId: string) {
     },
   });
 
-  console.log("state----",state)
-  const dispatch= useDispatch<AppDispatch>()
-  const {page}= useSelector((state:RootState)=>state.pageEdit)
+  console.log("state----", state);
+  const dispatch = useDispatch<AppDispatch>();
+  const { page } = useSelector((state: RootState) => state.pageEdit);
   useEffect(() => {
     const initEditor = async () => {
       try {
@@ -153,6 +151,52 @@ export function useEditor(containerId: string) {
         } as any;
 
         const editor = grapesjs.default.init(config);
+
+        // Add this after editor initialization (around line 195 in use-editor.ts)
+        // After: const editor = grapesjs.default.init(config);
+
+        // Add custom commands
+        editor.Commands.add("my-custom-command", {
+          run(editor) {
+            console.log("Custom button clicked!");
+            alert("Custom functionality triggered!");
+          },
+        });
+
+        editor.Commands.add("save-template", {
+          run(editor) {
+            console.log("Save template clicked!");
+            const html = editor.getHtml();
+            const css = editor.getCss();
+            console.log("Current HTML:", html);
+            console.log("Current CSS:", css);
+            alert("Template saved! Check console for details.");
+          },
+        });
+
+        // Add a custom panel with SVG icon buttons
+        editor.Panels.addPanel({
+          id: "custom-panel",
+          buttons: [
+            {
+              id: "custom-star-button",
+              className: "custom-btn-star",
+              command: "my-custom-command",
+              attributes: { title: "Custom Star Button" },
+              label: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
+              active: false,
+            },
+            {
+              id: "custom-save-button",
+              className: "custom-btn-save",
+              command: "save-template",
+              attributes: { title: "Save Template" },
+              label: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>`,
+              active: false,
+            },
+          ],
+        });
+
         editorRef.current = editor as any;
 
         // Add fallback methods if needed
@@ -194,7 +238,7 @@ export function useEditor(containerId: string) {
 
         const domc = editor.DomComponents;
         const bm = editor.BlockManager;
-         console.log("bloick bm", bm)
+        console.log("bloick bm", bm);
         domc.addType("product-list", {
           model: {
             defaults: {
@@ -419,7 +463,9 @@ export function useEditor(containerId: string) {
             const scriptComponent = editor.Components.getWrapper()?.find(
               'script[data-gjs-type="custom-script"]'
             )[0];
-            const content = scriptComponent ? scriptComponent.get("content") : "";
+            const content = scriptComponent
+              ? scriptComponent.get("content")
+              : "";
             return typeof content === "string" ? content : "";
           };
         }
@@ -840,40 +886,42 @@ export function useEditor(containerId: string) {
       }
     },
 
-savePage: async () => {
-  console.log("save the page called")
+    savePage: async () => {
+      console.log("save the page called");
 
-  if (!page?._id) {
-    toast.error("No page ID found. Cannot save.");
-    return;
-  }
-  if (!editorRef.current) {
-    toast.error("Editor not initialized.");
-    return;
-  }
+      if (!page?._id) {
+        toast.error("No page ID found. Cannot save.");
+        return;
+      }
+      if (!editorRef.current) {
+        toast.error("Editor not initialized.");
+        return;
+      }
 
-    const html = editorRef.current.getHtml();
-  const css = editorRef.current.getCss?.() || "";
+      const html = editorRef.current.getHtml();
+      const css = editorRef.current.getCss?.() || "";
 
-  // Option A: store CSS inline with HTML
-  const fullHtml = `
+      // Option A: store CSS inline with HTML
+      const fullHtml = `
     <style>
       ${css}
     </style>
     ${html}
   `;
-  // console.log("Saving page", page._id, html);
-  const response = await dispatch(savePageThunk({
-    id: page._id,
-    tenantId:page.tenantId,
-    content: fullHtml
-  })).unwrap();
-  // console.log("console.log", response)
-  if(response.ok){
-    toast.success("Page content updated successfully!");
-  }
-  // Optionally handle response or errors here
-},
+      // console.log("Saving page", page._id, html);
+      const response = await dispatch(
+        savePageThunk({
+          id: page._id,
+          tenantId: page.tenantId,
+          content: fullHtml,
+        })
+      ).unwrap();
+      // console.log("console.log", response)
+      if (response.ok) {
+        toast.success("Page content updated successfully!");
+      }
+      // Optionally handle response or errors here
+    },
 
     exportHtml: () => {
       if (editorRef.current) {
@@ -1022,7 +1070,7 @@ savePage: async () => {
 
     updateStyle: (property: string, value: string) => {
       try {
-        console.log("Selcted Editor")
+        console.log("Selcted Editor");
         if (state.selectedElement) {
           // Create a new style object with the updated property
           const style = { [property]: value };
@@ -1256,7 +1304,7 @@ savePage: async () => {
     selectComponent: (componentId: string) => {
       if (editorRef.current) {
         const component = editorRef.current.Components.getById(componentId);
-        console.log("component---",component)
+        console.log("component---", component);
         if (component) {
           editorRef.current.select(component);
         }
@@ -1449,7 +1497,6 @@ savePage: async () => {
       }
     },
   };
-
 
   return {
     state,

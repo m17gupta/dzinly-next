@@ -1,19 +1,19 @@
-"use client";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import BuilderClient from "./BuilderClient";
 
-import { Loader2 } from "lucide-react";
-import dynamic from "next/dynamic";
+export default async function Builder() {
+  const session = await auth();
 
-// Dynamically import GrapesJS editor to ensure it only loads on the client side
-const GrapesJSEditor = dynamic(() => import("@/components/editor"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center w-full h-screen bg-[#1E1E1E]">
-      <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      <span className="ml-2 text-lg text-white">Loading editor...</span>
-    </div>
-  ),
-});
+  // Check if user is authenticated
+  if (!session || !session.user) {
+    redirect("/auth/signin");
+  }
 
-export default function Builder() {
-  return <GrapesJSEditor />;
+  // Check if user has permission to edit (owner or admin)
+  if (session.user.role !== "owner" && session.user.role !== "A") {
+    redirect("/"); // Redirect to home if not authorized
+  }
+
+  return <BuilderClient />;
 }

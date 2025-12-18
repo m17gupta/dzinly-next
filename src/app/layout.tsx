@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "../store/ReduxProvider";
+import { AdminThemeProvider } from "@/components/admin/ThemeProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,11 +29,78 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://unpkg.com/grapesjs/dist/css/grapes.min.css"
         />
+        {/* Apply saved theme before React hydration to prevent flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const themePresets = {
+                    "modern-minimal": {
+                      "--background": "0 0% 100%",
+                      "--foreground": "240 10% 3.9%",
+                      "--sidebar": "240 4.8% 95.9%",
+                      "--sidebar-foreground": "240 5.9% 10%",
+                      "--sidebar-accent": "240 4.8% 90%",
+                      "--sidebar-border": "240 5.9% 90%",
+                      "--primary": "240 5.9% 10%",
+                      "--primary-foreground": "0 0% 98%",
+                    },
+                    "vibrant-creative": {
+                      "--background": "0 0% 100%",
+                      "--foreground": "222.2 84% 4.9%",
+                      "--sidebar": "262 83% 96%",
+                      "--sidebar-foreground": "262 47% 30%",
+                      "--sidebar-accent": "262 83% 92%",
+                      "--sidebar-border": "262 83% 85%",
+                      "--primary": "262 83% 58%",
+                      "--primary-foreground": "210 40% 98%",
+                    },
+                    "corporate-trust": {
+                      "--background": "210 40% 98%",
+                      "--foreground": "222.2 47.4% 11.2%",
+                      "--sidebar": "217 33% 17%",
+                      "--sidebar-foreground": "210 40% 98%",
+                      "--sidebar-accent": "217 33% 25%",
+                      "--sidebar-border": "217 33% 20%",
+                      "--primary": "221.2 83.2% 53.3%",
+                      "--primary-foreground": "210 40% 98%",
+                    },
+                    "dark-mode-pro": {
+                      "--background": "240 10% 3.9%",
+                      "--foreground": "0 0% 98%",
+                      "--sidebar": "0 0% 0%",
+                      "--sidebar-foreground": "240 5% 64.9%",
+                      "--sidebar-accent": "240 3.7% 15.9%",
+                      "--sidebar-border": "240 3.7% 15.9%",
+                      "--primary": "142.1 76.2% 36.3%",
+                      "--primary-foreground": "355.7 100% 97.3%",
+                    },
+                  };
+                  
+                  const savedTheme = localStorage.getItem("admin-theme") || "modern-minimal";
+                  const theme = themePresets[savedTheme];
+                  
+                  if (theme) {
+                    const root = document.documentElement;
+                    Object.entries(theme).forEach(([key, value]) => {
+                      root.style.setProperty(key, value);
+                    });
+                    
+                    if (savedTheme === 'dark-mode-pro' || savedTheme === 'corporate-trust') {
+                      root.classList.add('dark');
+                    }
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={`${inter.variable} antialiased`}>
-        
+        <AdminThemeProvider>
           <ReduxProvider>{children}</ReduxProvider>
-        
+        </AdminThemeProvider>
       </body>
     </html>
   );

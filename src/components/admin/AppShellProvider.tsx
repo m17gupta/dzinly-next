@@ -11,6 +11,7 @@ type AppShellProviderProps = {
 export async function AppShellProvider({ children }: AppShellProviderProps) {
   // Get session and user data
   const session = await auth();
+  console.log("session",session)
   const user: User | null = session?.user
     ? {
         id: session.user.id || "",
@@ -29,7 +30,7 @@ export async function AppShellProvider({ children }: AppShellProviderProps) {
   // Get websites for the current tenant
   let websites: Website[] = [];
   let currentWebsite: Website | null = null;
-
+  debugger
   if (user?.tenantId) {
     try {
       const websiteDocs = await websiteService.listByTenant(user.tenantId);

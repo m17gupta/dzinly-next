@@ -7,6 +7,8 @@ import attributeReducer from "../hooks/slices/attribute/AttributeSlice"
 import brandReducer from "../hooks/slices/brand/BrandSlice"
 import segmentReducer from "../hooks/slices/segment/SegmentSlice"
 import productReducer from "../hooks/slices/product/ProductSlice"
+import llmSettingReducer from "../hooks/slices/setting/llmSetting/LLMSettingSlice"
+
 
 
 
@@ -20,6 +22,7 @@ export const store = configureStore({
     attribute:attributeReducer,
     product:productReducer,
     websites: websitesReducer,
+    llmSetting:llmSettingReducer,
   },
 });
 

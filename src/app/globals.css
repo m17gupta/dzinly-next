@@ -229,7 +229,9 @@
   Keeping your specific editor styling intact
   -----------------------------------------------------------------------
 */
-.gjs-pn-panel { display: none !important; }
+/* Hide default GrapesJS panels but show custom ones */
+.gjs-pn-panel:not(#custom-panel) { display: none !important; }
+#custom-panel { display: block !important; }
 .gjs-cv-canvas { width: 100% !important; height: 100% !important; top: 0 !important; left: 0 !important; }
 .gjs-frame-wrapper { padding: 0 !important; }
 
@@ -258,6 +260,51 @@
 .gjs-selected { outline: 2px solid var(--color-primary) !important; }
 .gjs-hovered { outline: 1px solid color-mix(in srgb, var(--color-primary), transparent 50%) !important; }
 .gjs-resizer-h, .gjs-resizer-v { background-color: var(--color-primary) !important; border-color: var(--color-primary) !important; }
+
+/* Custom Panel Styling */
+#custom-panel {
+  position: fixed !important;
+  top: 50% !important;
+  right: 20px !important;
+  transform: translateY(-50%) !important;
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  z-index: 100 !important;
+}
+
+#custom-panel .gjs-pn-buttons {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+#custom-panel .gjs-pn-btn {
+  background-color: #334155 !important;
+  border: 1px solid #475569 !important;
+  border-radius: 6px !important;
+  padding: 10px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  color: #e2e8f0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#custom-panel .gjs-pn-btn:hover {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  transform: scale(1.05) !important;
+}
+
+#custom-panel .gjs-pn-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  color: currentColor !important;
+}
 
 /* -----------------------------------------------------------------------
   UTILITY CLASSES
