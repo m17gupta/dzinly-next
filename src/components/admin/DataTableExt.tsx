@@ -329,7 +329,6 @@ export function DataTableExt({
     }
   ) {
     e.preventDefault();
-
     if (path.includes("domain") || path.includes("/admin/pages")) {
       const isLocalHost = window.location.hostname.includes("localhost");
       let domain;
@@ -345,12 +344,11 @@ export function DataTableExt({
 
       if (!domain) return;
       const url = isLocalHost ? `http://${domain}` : `https://${domain}`;
-      console.log(url);
-      window.location.href = url;
+      window.open(url, "_blank", "noopener,noreferrer");
     } else {
       if (!row.slug) return;
-
-      router.push(`/${row.slug}`);
+      const url = `/${row.slug}`;
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   }
 

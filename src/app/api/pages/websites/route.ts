@@ -5,10 +5,8 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
 
-
   const id = searchParams.get("id");
   const slug = searchParams.get("slug");
-
   // If neither ID nor slug is provided
   if (!id && !slug) {
     return NextResponse.json(
@@ -16,7 +14,6 @@ export async function GET(req: Request) {
       { status: 400 }
     );
   }
-
   let result;
 
   const db = await getDatabase()
