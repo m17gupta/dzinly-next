@@ -630,10 +630,10 @@ function Sidebar({
                             type="button"
                             onClick={() => toggleGroup(section.id)}
                             className={cn(
-                              "w-full flex items-center gap-3 rounded-md px-3 py-2.5",
+                              "w-full flex items-center gap-3 rounded-md px-3 py-2.5 ",
                               "text-left transition-all duration-200",
                               // UPDATED: Cleaner header style
-                              "bg-transparent hover:bg-background hover:shadow-sm border border-transparent hover:border-border/40",
+                              "bg-background hover:bg-background hover:shadow-sm border border-transparent hover:border-border/40 shadow-sm",
                               "group"
                             )}
                           >
@@ -642,7 +642,7 @@ function Sidebar({
                             </div>
 
                             <div className="flex-1">
-                              <div className="text-[13px] font-semibold text-foreground">
+                              <div className="text-[13px] font-semibold text-foreground ">
                                 {section.label}
                               </div>
                             </div>
@@ -1142,7 +1142,7 @@ export function AppShell({
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground overflow-hidden">
+    <div className="flex h-[100vh] bg-background text-foreground overflow-hidden">
       <Sidebar
         websites={websites}
         currentWebsite={currentWebsite}
