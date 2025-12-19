@@ -3,14 +3,17 @@ import { LLMModel } from "@/components/admin/settings/integration/llm/type/LLMMo
 
 export type LLMSettingState = {
   listLLMSettings: LLMModel[];
+  currentLLMSetting:LLMModel;
   isLLMSettingLoading: boolean;
   hasFetched: boolean;
 };
 
 const initialState: LLMSettingState = {
   listLLMSettings: [],
+  currentLLMSetting:{},
   isLLMSettingLoading: false,
   hasFetched: false,
+
 };
 
 export const fetchLLMSettings = createAsyncThunk<
@@ -21,7 +24,7 @@ export const fetchLLMSettings = createAsyncThunk<
   "llmSetting/fetchLLMSettings",
   async ({websiteId}, { rejectWithValue }) => {
     try {
-      const res = await fetch(`/api/admin/llmSetting`);
+      const res = await fetch(`/api/admin/llmSetting?websiteId=${websiteId}`);
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         return rejectWithValue(body?.error || `HTTP ${res.status}`);
@@ -45,6 +48,33 @@ export const fetchLLMSettings = createAsyncThunk<
         return true;
       }
     },
+  }
+);
+
+export const fetchLLMSettingByWebsiteId = createAsyncThunk<
+  LLMModel | null,
+  { websiteId: string },
+  { rejectValue: string }
+>(
+  "llmSetting/fetchLLMSettingByWebsiteId",
+  async ({ websiteId }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/admin/llmSetting?websiteId=${websiteId}`);
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        return rejectWithValue(body?.error || `HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      console.log("LLM setting by websiteId", data);
+      // Return the first active LLM setting or the first one in the list
+      const settings = data?.data || [];
+      const activeSetting = settings.find((s: LLMModel) => s.isActive);
+      return activeSetting || settings[0] || null;
+    } catch (error: unknown) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Network error"
+      );
+    }
   }
 );
 
@@ -154,6 +184,9 @@ const llmSettingSlice = createSlice({
         };
       }
     },
+    setCurrentLLMSetting(state,action){
+      state.currentLLMSetting= action.payload
+    },
     removeLLMSetting(state, action: PayloadAction<string | undefined>) {
       const id = action.payload;
       state.listLLMSettings = state.listLLMSettings.filter((llm) => {
@@ -183,6 +216,22 @@ const llmSettingSlice = createSlice({
         }
       )
       .addCase(fetchLLMSettings.rejected, (state) => {
+        state.isLLMSettingLoading = false;
+      })
+      // Fetch LLM Setting by Website ID
+      .addCase(fetchLLMSettingByWebsiteId.pending, (state) => {
+        state.isLLMSettingLoading = true;
+      })
+      .addCase(
+        fetchLLMSettingByWebsiteId.fulfilled,
+        (state, action: PayloadAction<LLMModel | null>) => {
+          if (action.payload) {
+            state.currentLLMSetting = action.payload;
+          }
+          state.isLLMSettingLoading = false;
+        }
+      )
+      .addCase(fetchLLMSettingByWebsiteId.rejected, (state) => {
         state.isLLMSettingLoading = false;
       })
       // Create LLM Setting
@@ -252,6 +301,7 @@ export const {
   updateLLMSettingLocal,
   removeLLMSetting,
   clearLLMSettings,
+  setCurrentLLMSetting,
 } = llmSettingSlice.actions;
 
 export default llmSettingSlice.reducer;

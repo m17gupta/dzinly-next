@@ -51,6 +51,8 @@ export type DataTableExtProps = {
   initialColumns?: ColumnConfig[];
   onDelete?: (row: any) => void;
   onView?: (row: any) => void;
+  website?: string[];
+  sysdomain?: string;
 };
 
 type SortDir = "asc" | "desc";
@@ -85,6 +87,8 @@ export function DataTableExt({
   initialColumns,
   onDelete,
   onView,
+  website,
+  sysdomain,
 }: DataTableExtProps) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -325,24 +329,26 @@ export function DataTableExt({
     }
   ) {
     e.preventDefault();
-    if (path.includes("domain")) {
-      if (!row.primaryDomain?.length) return;
-
+    if (path.includes("domain") || path.includes("/admin/pages")) {
       const isLocalHost = window.location.hostname.includes("localhost");
-
-      const domain = row.primaryDomain.find((d) =>
-        isLocalHost ? d.includes("localhost") : !d.includes("localhost")
-      );
+      let domain;
+      if (path.includes("domain") && row.primaryDomain?.length) {
+        domain = row.primaryDomain.find((d) =>
+          isLocalHost ? d.includes("localhost") : !d.includes("localhost")
+        );
+      } else if (website) {
+        domain = isLocalHost
+          ? `${website.find((d) => d.includes("localhost"))}/${row.slug}`
+          : `${sysdomain}/${row.slug}`;
+      }
 
       if (!domain) return;
-
       const url = isLocalHost ? `http://${domain}` : `https://${domain}`;
-
-      window.location.href = url;
+      window.open(url, "_blank", "noopener,noreferrer");
     } else {
       if (!row.slug) return;
-
-      router.push(`/${row.slug}`);
+      const url = `/${row.slug}`;
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   }
 
@@ -351,11 +357,11 @@ export function DataTableExt({
       <div className="flex items-center justify-between">
         <div className="text-xl font-semibold">{title} </div>
         <div className="flex items-center gap-2">
-          {/* {createHref && (
+          {createHref && (
             <Link href={createHref} className="text-sm">
               <Button size="sm">Create New</Button>
             </Link>
-          )} */}
+          )}
         </div>
       </div>
 

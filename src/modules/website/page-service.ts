@@ -73,7 +73,7 @@ export class PageService {
   async listPages(
     tenantId: string | ObjectId,
     websiteId?: string | ObjectId
-  ): Promise<Page[]> {
+  ): Promise<any[]> {
     const collection = await this.getCollection();
 
     const tid =
@@ -86,7 +86,31 @@ export class PageService {
     const query: any = { tenantId: tid };
     if (wid)
       query.$or = [{ websiteId: wid }, { websiteId: { $exists: false } }];
-    return collection.find(query).sort({ createdAt: -1 }).toArray();
+    return collection
+      .aggregate([
+        { $match: query },
+
+        // 🔗 Join websites collection
+        {
+          $lookup: {
+            from: "websites",
+            localField: "websiteId",
+            foreignField: "_id",
+            as: "website",
+          },
+        },
+
+        // Convert array → object
+        {
+          $unwind: {
+            path: "$website",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+
+        { $sort: { createdAt: -1 } },
+      ])
+      .toArray();
   }
 
   async createPage(
@@ -132,7 +156,6 @@ export class PageService {
     //     },
     //   }
     // );
-
 
     const result = await collection.updateOne(
       { _id: oid, tenantId: tid },

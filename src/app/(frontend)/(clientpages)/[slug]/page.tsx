@@ -7,8 +7,6 @@ export default async function PageTemplate({ params }: any) {
 
   const host = headersList.get("host");
 
-  console.log("Host===>>>", host)
-
   const main = await fetch(`${API_BASE_URL}/api/domain/${host}`);
 
   const domainData = await main.json();
@@ -28,26 +26,31 @@ export default async function PageTemplate({ params }: any) {
 
   const session = await auth();
 
-  console.log(session?.user.role)
-
   const res = await fetch(`${API_BASE_URL}/api/pages/websites?${query}`);
 
   const t = await res.json();
 
   // Check if the response has the expected structure
-  if (!t || !t.item || !t.item.content) {
+  if (!t || !t.item || !t.item.content ||!t.item.websiteId) {
     return <div>Page not found or content unavailable</div>;
   }
-
+  console.log("websaitite---",t.item.websiteId)
   const html = t.item.content;
 
   const EditButton = (await import("../EditButton")).default;
+
+  const name = "Himanshu";
+
+  const processedHtml = html.replace(/\{\{name\}\}/g, name);
+
   return (
     <div>
-      {session && session.user && (session.user.role == "owner" || session?.user.role=="A" )&& (
-        <EditButton pageData={t.item} />
-      )}
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      {session &&
+        session.user &&
+        (session.user.role == "owner" || session?.user.role == "A") && (
+          <EditButton pageData={t.item} />
+        )}
+      <div dangerouslySetInnerHTML={{ __html: processedHtml }} />
     </div>
   );
 }

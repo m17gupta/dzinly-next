@@ -10,13 +10,15 @@ import { DeviceConfig } from "../../../types/editor";
 import TopToolbar from "./GrapesJSEditor/toolbars/TopToolbar";
 import BottomToolbar from "./GrapesJSEditor/toolbars/BottomToolbar";
 import PropertiesSidebar from "./GrapesJSEditor/sidebar/PropertiesSidebar";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { AiChatModal } from "./aiChatModel/AiChatModal";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 import { clearPageEdit } from "@/hooks/slices/pageEditSlice";
+import { fetchLLMSettingByWebsiteId, fetchLLMSettings } from "@/hooks/slices/setting/llmSetting/LLMSettingSlice";
 
 export default function GrapesJSEditor() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { state, actions } = useEditor("gjs-editor");
+  const { state, actions, isAiChatOpen, setIsAiChatOpen, selectedComponentForAi } = useEditor("gjs-editor");
 
   const [showResponsivePanel, setShowResponsivePanel] = useState(false);
   const [customDevices, setCustomDevices] = useState<DeviceConfig[]>([]);
@@ -27,7 +29,7 @@ export default function GrapesJSEditor() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [recentBlocks, setRecentBlocks] = useState<string[]>([]);
   const [favoriteBlocks, setFavoriteBlocks] = useState<string[]>([]);
-
+  const { user } = useSelector((state: RootState) => state.user);
   const dispatch = require("react-redux").useDispatch();
   const { page } = useSelector((state: RootState) => state.pageEdit);
 
@@ -39,6 +41,17 @@ export default function GrapesJSEditor() {
     return inner ? inner[1] : "";
   }).join("\n");
 }
+
+
+
+// get llm setting data based on tenenantId
+const {currentWebsite}= useSelector((state:RootState)=>state.websites)
+useEffect(()=>{
+  if(user && user.tenantId &&!currentWebsite){
+ dispatch(fetchLLMSettingByWebsiteId({websiteId:user.tenantId}))
+  }
+},[user])
+
 
   // update the page content into editor
   useEffect(() => {
@@ -440,6 +453,13 @@ export default function GrapesJSEditor() {
           onUpdateDevice={handleUpdateDevice}
         />
       </TooltipProvider>
+
+      {/* AI Chat Modal */}
+      <AiChatModal
+        isOpen={isAiChatOpen}
+        onClose={() => setIsAiChatOpen(false)}
+        component={selectedComponentForAi}
+      />
     </div>
   );
 }

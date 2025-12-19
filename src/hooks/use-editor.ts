@@ -60,6 +60,8 @@ interface ExtendedEditorState extends EditorState {
 
 export function useEditor(containerId: string) {
   const editorRef = useRef<GrapesJSEditor | null>(null);
+  const [isAiChatOpen, setIsAiChatOpen] = useState(false);
+  const [selectedComponentForAi, setSelectedComponentForAi] = useState<any>(null);
   const [state, setState] = useState<ExtendedEditorState>({
     editor: null,
     selectedElement: null,
@@ -168,8 +170,7 @@ export function useEditor(containerId: string) {
             console.log("Save template clicked!");
             const html = editor.getHtml();
             const css = editor.getCss();
-            console.log("Current HTML:", html);
-            console.log("Current CSS:", css);
+          
             alert("Template saved! Check console for details.");
           },
         });
@@ -201,7 +202,7 @@ export function useEditor(containerId: string) {
 
         // Add fallback methods if needed
         if (typeof (editor as any).setJs !== "function") {
-          console.log("Adding custom setJs method");
+        
           (editor as any).setJs = (js: string) => {
             // Store JS in editor's storage
             editor.StorageManager.store({
@@ -504,6 +505,44 @@ export function useEditor(containerId: string) {
       // Initialize interactions if not already present
       if (!component.get("interactions")) {
         component.set("interactions", []);
+      }
+
+      // Add custom toolbar button only if it doesn't already exist
+      const defaultToolbar = component.get('toolbar');
+      const hasAiChatButton = defaultToolbar.some((btn: any) => 
+        btn.attributes?.title === 'AI Chat'
+      );
+      
+      if (!hasAiChatButton) {
+        const customToolbar = [
+          ...defaultToolbar,
+          {
+            attributes: { title: 'AI Chat' },
+            label: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              <circle cx="9" cy="10" r="1"></circle>
+              <circle cx="15" cy="10" r="1"></circle>
+              <path d="M9 14s1 1 3 1 3-1 3-1"></path>
+            </svg>`,
+            command: (editor: any) => {
+              console.log('AI Chat button clicked!', component);
+              
+              // Get component HTML
+              const componentHtml = component.toHTML();
+              console.log('Component HTML:', componentHtml);
+              
+              // Store component with its HTML
+              setSelectedComponentForAi({
+                component,
+                html: componentHtml,
+                type: component.get('type'),
+                tagName: component.get('tagName')
+              });
+              setIsAiChatOpen(true);
+            },
+          },
+        ];
+        component.set('toolbar', customToolbar);
       }
     });
 
@@ -1501,5 +1540,8 @@ export function useEditor(containerId: string) {
   return {
     state,
     actions,
+    isAiChatOpen,
+    setIsAiChatOpen,
+    selectedComponentForAi,
   };
 }

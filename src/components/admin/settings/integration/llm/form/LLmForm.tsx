@@ -34,8 +34,8 @@ const LLmForm: React.FC<LLMFormProps> = ({
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof LLMModel, string>>>({});
-  const {user}= useSelector((state:RootState)=>state.user)
-  
+  const { user } = useSelector((state: RootState) => state.user);
+  const currentWebsite = useSelector((state: RootState) => state.websites.currentWebsite);
   // Test API Key states
   const [testPrompt, setTestPrompt] = useState("");
   const [testResult, setTestResult] = useState("");
@@ -107,14 +107,27 @@ const LLmForm: React.FC<LLMFormProps> = ({
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validate()) {
       return;
     }
-     const data={...formData, tenantId:user?.tenantId}
+    
+    if (!currentWebsite?._id) {
+      setErrors((prev) => ({
+        ...prev,
+        name: "No website selected",
+      }));
+      return;
+    }
+    
+    const data = {
+      ...formData, 
+      tenantId: user?.tenantId,
+      websiteId: currentWebsite._id
+    };
+    
     await onSubmit(data);
   };
 
@@ -142,7 +155,7 @@ const LLmForm: React.FC<LLMFormProps> = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          modelType: formData.name,
+          modelType: formData.model,
           apiKey: formData.secreteKey,
           prompt: testPrompt,
         }),

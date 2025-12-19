@@ -10,7 +10,7 @@ export interface WebsiteDoc {
   name: string;
   serviceType: ServiceType;
   primaryDomain?: string[] | null;
-  systemSubdomain: string;
+  systemSubdomain?: string;
   branding?: {
     // legacy fields
     logoUrl?: string | null;
@@ -114,10 +114,7 @@ export class WebsiteService {
         ? new ObjectId(params.tenantId)
         : params.tenantId;
     const websiteId = new ObjectId().toHexString();
-    const systemSubdomain = await this.generateSystemSubdomain(
-      params.tenantSlug,
-      params.name
-    );
+
     const now = new Date();
     const doc: Omit<WebsiteDoc, "_id"> = {
       websiteId,
@@ -125,7 +122,6 @@ export class WebsiteService {
       name: params.name,
       serviceType: params.serviceType,
       ...(params.primaryDomain ? { primaryDomain: params.primaryDomain } : {}),
-      systemSubdomain,
       branding: {},
       createdAt: now,
       updatedAt: now,

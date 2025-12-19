@@ -2,16 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { modelType, apiKey, prompt } = await request.json();
+    const { modelType,model, apiKey, prompt, componentHtml } = await request.json();
 
     if (!modelType || !apiKey || !prompt) {
       return NextResponse.json(
-        { success: false, error: "Missing required fields" },
+        { success: false, error: "Missing required fields: modelType, apiKey, and prompt are required" },
         { status: 400 }
       );
     }
 
     let result = "";
+
+    // Enhance prompt with component HTML context if provided (componentHtml is optional)
+    const enhancedPrompt = componentHtml 
+      ? `Context: Here is the HTML component:\n${componentHtml}\n\nUser Request: ${prompt}`
+      : prompt;
 
     // Test ChatGPT API
     if (modelType === "ChatGPT") {
@@ -22,12 +27,12 @@ export async function POST(request: NextRequest) {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: "gpt-4.1",
+          model:model,
           messages: [
             { role: "system", content: "You are a helpful AI assistant." },
             {
               role: "user",
-              content: prompt,
+              content: enhancedPrompt,
             },
           ],
           max_tokens: 150,
@@ -62,7 +67,7 @@ export async function POST(request: NextRequest) {
               {
                 parts: [
                   {
-                    text: prompt,
+                    text: enhancedPrompt,
                   },
                 ],
               },
