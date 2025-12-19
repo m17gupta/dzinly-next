@@ -10,9 +10,10 @@ import { DeviceConfig } from "../../../types/editor";
 import TopToolbar from "./GrapesJSEditor/toolbars/TopToolbar";
 import BottomToolbar from "./GrapesJSEditor/toolbars/BottomToolbar";
 import PropertiesSidebar from "./GrapesJSEditor/sidebar/PropertiesSidebar";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 import { clearPageEdit } from "@/hooks/slices/pageEditSlice";
+import { fetchLLMSettings } from "@/hooks/slices/setting/llmSetting/LLMSettingSlice";
 
 export default function GrapesJSEditor() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,7 +28,7 @@ export default function GrapesJSEditor() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [recentBlocks, setRecentBlocks] = useState<string[]>([]);
   const [favoriteBlocks, setFavoriteBlocks] = useState<string[]>([]);
-
+  const { user } = useSelector((state: RootState) => state.user);
   const dispatch = require("react-redux").useDispatch();
   const { page } = useSelector((state: RootState) => state.pageEdit);
 
@@ -40,6 +41,23 @@ export default function GrapesJSEditor() {
   }).join("\n");
 }
 
+
+
+// get llm setting data based on tenenantId
+
+useEffect(()=>{
+  if(user && user.tenantId){
+  console.log("user")
+  }
+},[user])
+
+const getAllLLmSetting=async(websiteId:string)=>{
+  try{
+   const response= await dispatch(fetchLLMSettings({websiteId}))
+  }catch(err){
+    console.log("Error in getting LLMSteting")
+  }
+}
   // update the page content into editor
   useEffect(() => {
   if (state.editor && page?.content) {

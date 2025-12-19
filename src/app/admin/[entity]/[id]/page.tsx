@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default function EntityDetailPage(props: any) {
-  const { entity, id } = props.params as { entity: string; id: string };
+export default async function EntityDetailPage(props: any) {
+  const { entity, id } = await props.params as { entity: string; id: string };
   // TODO: Replace with a server-side fetch per entity (e.g. categoryService.getById)
   const mockDb: Record<string, Record<string, { id: string; name: string; description?: string }>> = {
     category: {

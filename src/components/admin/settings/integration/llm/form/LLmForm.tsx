@@ -34,8 +34,8 @@ const LLmForm: React.FC<LLMFormProps> = ({
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof LLMModel, string>>>({});
-  const {user}= useSelector((state:RootState)=>state.user)
-  
+  const { user } = useSelector((state: RootState) => state.user);
+  const currentWebsite = useSelector((state: RootState) => state.websites.currentWebsite);
   // Test API Key states
   const [testPrompt, setTestPrompt] = useState("");
   const [testResult, setTestResult] = useState("");
@@ -114,7 +114,21 @@ const LLmForm: React.FC<LLMFormProps> = ({
     if (!validate()) {
       return;
     }
-     const data={...formData, tenantId:user?.tenantId}
+    
+    if (!currentWebsite?._id) {
+      setErrors((prev) => ({
+        ...prev,
+        name: "No website selected",
+      }));
+      return;
+    }
+    
+    const data = {
+      ...formData, 
+      tenantId: user?.tenantId,
+      websiteId: currentWebsite._id
+    };
+    
     await onSubmit(data);
   };
 

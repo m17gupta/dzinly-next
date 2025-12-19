@@ -505,6 +505,29 @@ export function useEditor(containerId: string) {
       if (!component.get("interactions")) {
         component.set("interactions", []);
       }
+
+      // Add custom toolbar button
+      const defaultToolbar = component.get('toolbar');
+      const customToolbar = [
+        ...defaultToolbar,
+        {
+          attributes: { title: 'AI Chat' },
+          label: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <circle cx="9" cy="10" r="1"></circle>
+            <circle cx="15" cy="10" r="1"></circle>
+            <path d="M9 14s1 1 3 1 3-1 3-1"></path>
+          </svg>`,
+          command: (editor: any) => {
+            // Your custom AI chat functionality here
+            console.log('AI Chat button clicked!', component);
+            alert(`AI Chat for component: ${component.get('type')}`);
+            // Example: Open AI chat modal or panel
+            // You can integrate your AI chat functionality here
+          },
+        },
+      ];
+      component.set('toolbar', customToolbar);
     });
 
     editor.on("component:update", (component: any) => {
