@@ -131,6 +131,10 @@ import { clearBrands } from "@/hooks/slices/brand/BrandSlice";
 import { clearSegments } from "@/hooks/slices/segment/SegmentSlice";
 import { clearCategories } from "@/hooks/slices/category/CategorySlice";
 import { Input } from "../ui/input";
+import Dropdowns from "../../app/admin/Dropdowns";
+import { useState } from "react";
+import { AccountSetting } from "@/app/admin/AccountSetting";
+
 
 // ---------------------------------------------------------------------------
 // Types & interfaces
@@ -188,7 +192,7 @@ const currentWebsiteSections: NavSection[] = [
     id: "dashboard-overview",
     label: "Overview",
     items: [
-      { label: "Dashboard", href: "/admin/pages", icon: LayoutDashboard },
+      { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
       { label: "Analytics", href: "/admin/analytics", icon: BarChart3, permission: "websites:update" },
       { label: "Activity Log", href: "/admin/activity-log", icon: Activity, permission: "analytics:view" },
       { label: "Notifications", href: "/admin/notifications", icon: Bell, permission: "security:read" },
@@ -729,9 +733,9 @@ function Sidebar({
                 <div className="mt-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="flex w-full items-center gap-3 rounded-md px-3 py-2 hover:bg-background hover:shadow-sm border border-transparent hover:border-border transition-all">
-                        <Avatar className="h-8 w-8 border">
-                          <AvatarFallback className="bg-primary/10 text-primary font-bold">SC</AvatarFallback>
+                      <button className="flex w-full items-center rounded-full gap-3  px-3 py-2 hover:bg-background hover:shadow-sm border border-transparent hover:border-border transition-all">
+                        <Avatar className=" border p-0 rounded-full">
+                          <AvatarFallback className="bg-primary/10 text-primary font-bold w-8 h-8 rounded-full flex justify-center items-center">SC</AvatarFallback>
                         </Avatar>
 
                         <div className="flex flex-col flex-1 text-left leading-tight">
@@ -775,7 +779,7 @@ function Sidebar({
                       <DropdownMenuItem asChild>
                         <Link href="/admin/themes" className="flex items-center w-full cursor-pointer">
                           <Palette className="mr-2 h-4 w-4" />
-                          Theme
+                          Themes
                         </Link>
                       </DropdownMenuItem>
 
@@ -1022,7 +1026,7 @@ function Topbar({
       await signOut({ callbackUrl: "/" });
     }
   };
-
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/80 px-4 md:px-6 backdrop-blur shadow-sm supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-2 md:gap-3">
@@ -1084,8 +1088,8 @@ function Topbar({
         </Button>
 
         <Button size="sm" className="hidden md:flex text-xs h-9 bg-primary text-primary-foreground shadow hover:bg-primary/90">
-          <Sparkles className="h-3 w-3 mr-2" />
-          Upgrade
+          <Sparkles className="h-3 w-3 " />
+          Ai Assistant  
         </Button>
 
         <DropdownMenu>
@@ -1093,10 +1097,10 @@ function Topbar({
             <Button
               variant="ghost"
               size="icon"
-              className="ml-1 h-9 w-9 rounded-full border bg-muted/20"
+              className="ml-1 h-9 w-9 rounded-full border bg-muted/20 "
             >
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary/10 text-primary font-bold">
+              <Avatar className="w-full">
+                <AvatarFallback className=" text-primary font-bold rounded-full ">
                   {user?.name?.charAt(0).toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
@@ -1112,7 +1116,15 @@ function Topbar({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Account settings</DropdownMenuItem>
+
+          <DropdownMenuItem 
+            onSelect={(e: Event) => {
+              e.preventDefault(); 
+              setIsSettingsOpen(true);
+            }}
+          >    Account settings
+          </DropdownMenuItem>
+            
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleSignOut}
@@ -1122,6 +1134,13 @@ function Topbar({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+      <AccountSetting
+        open={isSettingsOpen} 
+        onOpenChange={setIsSettingsOpen} 
+      />
+
+        {/* <Dropdowns/> */}
       </div>
     </header>
   );
@@ -1161,7 +1180,7 @@ export function AppShell({
           onToggleCollapse={(event) => setSidebarCollapsed((prev) => !prev)}
         />
         <main className="flex-1 overflow-auto bg-muted/10 p-4 md:p-6">
-          <div className="mx-auto max-w-7xl h-full">
+          <div className="mx-auto max-w-7xl h-full ">
             {children}
           </div>
         </main>

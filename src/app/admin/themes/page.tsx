@@ -21,6 +21,7 @@ export default function ThemePage() {
 
   return (
     <div className="min-h-screen bg-muted/30 p-4 md:p-8">
+    
       <div className="max-w-6xl mx-auto space-y-8">
         
         <div className="flex flex-col gap-2">
@@ -28,7 +29,7 @@ export default function ThemePage() {
             <div className="p-2 bg-primary/10 rounded-lg">
               <Palette className="w-6 h-6" />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Theme Settings</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">Theme Settings 1</h1>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl">
             Choose a theme that fits your brand. Changes reflect immediately.
