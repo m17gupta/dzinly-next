@@ -10,14 +10,15 @@ import { DeviceConfig } from "../../../types/editor";
 import TopToolbar from "./GrapesJSEditor/toolbars/TopToolbar";
 import BottomToolbar from "./GrapesJSEditor/toolbars/BottomToolbar";
 import PropertiesSidebar from "./GrapesJSEditor/sidebar/PropertiesSidebar";
+import { AiChatModal } from "./aiChatModel/AiChatModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { clearPageEdit } from "@/hooks/slices/pageEditSlice";
-import { fetchLLMSettings } from "@/hooks/slices/setting/llmSetting/LLMSettingSlice";
+import { fetchLLMSettingByWebsiteId, fetchLLMSettings } from "@/hooks/slices/setting/llmSetting/LLMSettingSlice";
 
 export default function GrapesJSEditor() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { state, actions } = useEditor("gjs-editor");
+  const { state, actions, isAiChatOpen, setIsAiChatOpen, selectedComponentForAi } = useEditor("gjs-editor");
 
   const [showResponsivePanel, setShowResponsivePanel] = useState(false);
   const [customDevices, setCustomDevices] = useState<DeviceConfig[]>([]);
@@ -44,20 +45,14 @@ export default function GrapesJSEditor() {
 
 
 // get llm setting data based on tenenantId
-
+const {currentWebsite}= useSelector((state:RootState)=>state.websites)
 useEffect(()=>{
-  if(user && user.tenantId){
-  console.log("user")
+  if(user && user.tenantId &&!currentWebsite){
+ dispatch(fetchLLMSettingByWebsiteId({websiteId:user.tenantId}))
   }
 },[user])
 
-const getAllLLmSetting=async(websiteId:string)=>{
-  try{
-   const response= await dispatch(fetchLLMSettings({websiteId}))
-  }catch(err){
-    console.log("Error in getting LLMSteting")
-  }
-}
+
   // update the page content into editor
   useEffect(() => {
   if (state.editor && page?.content) {
@@ -458,6 +453,13 @@ const getAllLLmSetting=async(websiteId:string)=>{
           onUpdateDevice={handleUpdateDevice}
         />
       </TooltipProvider>
+
+      {/* AI Chat Modal */}
+      <AiChatModal
+        isOpen={isAiChatOpen}
+        onClose={() => setIsAiChatOpen(false)}
+        component={selectedComponentForAi}
+      />
     </div>
   );
 }

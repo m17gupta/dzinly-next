@@ -156,7 +156,10 @@ const LLMtable = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            
             name: data.name,
+            model:data.model,
+            websiteId:data.websiteId,
             secreteKey: data.secreteKey,
             isActive: data.isActive,
           }),

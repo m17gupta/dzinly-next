@@ -107,7 +107,6 @@ const LLmForm: React.FC<LLMFormProps> = ({
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -156,7 +155,7 @@ const LLmForm: React.FC<LLMFormProps> = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          modelType: formData.name,
+          modelType: formData.model,
           apiKey: formData.secreteKey,
           prompt: testPrompt,
         }),

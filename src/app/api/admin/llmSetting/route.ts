@@ -50,8 +50,11 @@ export async function POST(request: NextRequest) {
     
     const newLLMSetting = {
       name: body.name,
+       model:body.model,
       secreteKey: body.secreteKey,
       tenantId,
+      websiteId:body.websiteId,
+     
       createdBy: userId,
       createdAt: new Date(),
       updatedAt: new Date(),
