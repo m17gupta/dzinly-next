@@ -8,8 +8,7 @@ const createSchema = z.object({
   name: z.string().min(1),
   serviceType: z.enum(['WEBSITE_ONLY', 'ECOMMERCE']),
   primaryDomain: z.array(z.string()).optional().nullable(),
-  // Or if you want to ensure at least one domain when provided:
-  // primaryDomain: z.array(z.string().url()).min(1).optional().nullable(),
+
 });
 
 export async function GET() {
@@ -26,7 +25,6 @@ export async function POST(req: Request) {
   
   const json = await req.json();
 
-  console.log(json)
   const parsed = createSchema.safeParse(json);
   
   if (!parsed.success) 
