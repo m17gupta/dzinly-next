@@ -232,21 +232,38 @@ export default function DashboardPage() {
                 <CardTitle className="text-base">Recent Renders</CardTitle>
              </CardHeader>
              <CardContent>
-                <div className="grid grid-cols-2 gap-3">
-                   {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="aspect-square bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center relative group overflow-hidden cursor-pointer">
-                         <div className="absolute inset-0 flex items-center justify-center text-slate-300">
-                            <span className="text-xs font-medium">Image {i}</span>
-                         </div>
-                         {/* Hover Overlay */}
-                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full shadow-lg">
-                               <ArrowUpRight className="h-4 w-4" />
-                            </Button>
-                         </div>
-                      </div>
-                   ))}
-                </div>
+             <div className="grid grid-cols-2 gap-3">
+  {[1, 2, 3, 4].map((i) => (
+    <div
+      key={i}
+      className="relative aspect-square rounded-lg border border-slate-200 overflow-hidden group cursor-pointer"
+    >
+      {/* IMAGE */}
+      <img
+        src="https://testvizualizer.s3.us-east-2.amazonaws.com/uploads/images/11/Kaitlin_L_Reformatted.png"
+        alt={`Image ${i}`}
+        className="h-full w-full object-cover"
+      />
+
+      {/* PLACEHOLDER TEXT */}
+      <div className="absolute inset-0 flex items-center justify-center text-slate-300 pointer-events-none">
+        {/* <span className="text-xs font-medium">Image {i}</span> */}
+      </div>
+
+      {/* HOVER OVERLAY WITH ICON */}
+      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        <Button
+          size="icon"
+          variant="secondary"
+          className="h-8 w-8 rounded-full shadow-lg"
+        >
+          <ArrowUpRight className="h-4 w-4 text-white" />
+        </Button>
+      </div>
+    </div>
+  ))}
+</div>
+
                 <Button variant="ghost" className="w-full mt-4 text-xs">View Gallery</Button>
              </CardContent>
           </Card>
