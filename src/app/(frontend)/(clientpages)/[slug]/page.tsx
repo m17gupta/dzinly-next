@@ -34,6 +34,11 @@ export default async function PageTemplate({ params }: any) {
 
   const t = await res.json();
 
+  // Check if the response has the expected structure
+  if (!t || !t.item || !t.item.content) {
+    return <div>Page not found or content unavailable</div>;
+  }
+
   const html = t.item.content;
 
   const EditButton = (await import("../EditButton")).default;

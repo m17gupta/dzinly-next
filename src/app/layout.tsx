@@ -30,7 +30,7 @@ export default function RootLayout({
           href="https://unpkg.com/grapesjs/dist/css/grapes.min.css"
         />
         {/* Apply saved theme before React hydration to prevent flash */}
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -95,7 +95,7 @@ export default function RootLayout({
               })();
             `,
           }}
-        />
+        /> */}
       </head>
       <body className={`${inter.variable} antialiased`}>
         <AdminThemeProvider>
