@@ -95,7 +95,7 @@ export function useEditor(containerId: string) {
     },
   });
 
-  console.log("state----", state);
+
   const dispatch = useDispatch<AppDispatch>();
   const { page } = useSelector((state: RootState) => state.pageEdit);
   useEffect(() => {
@@ -529,7 +529,7 @@ export function useEditor(containerId: string) {
               
               // Get component HTML
               const componentHtml = component.toHTML();
-              console.log('Component HTML:', componentHtml);
+              // console.log('Component HTML:', componentHtml);
               
               // Store component with its HTML
               setSelectedComponentForAi({

@@ -57,7 +57,7 @@ export function AiChatModal({ isOpen, onClose, component }: AiChatModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[98vw] w-[98vw] max-h-[98vh] overflow-hidden bg-white border-gray-200 p-0">
+      <DialogContent className="max-w-[100vw] w-[100vw] max-h-[98vh] overflow-hidden bg-white border-gray-200 p-0">
         {/* Header */}
         <DialogHeader className="border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
@@ -80,16 +80,18 @@ export function AiChatModal({ isOpen, onClose, component }: AiChatModalProps) {
           {/* Top Section - Split View */}
           <div className="flex h-1/2 border-b border-gray-200">
             {/* Left Side - AI Chat */}
-            <div className="w-1/2 border-r border-gray-200 px-8 py-6 overflow-auto">
-              <AiChat componentHtml={componentHtml} onResponse={setApiResponse} />
+            <div className="w-1/2 border-r border-gray-200 py-6 overflow-auto">
+              <div className="h-full flex flex-col justify-start">
+                <AiChat componentHtml={componentHtml} onResponse={setApiResponse} />
+              </div>
             </div>
 
             {/* Right Side - HTML Preview */}
-            <div className="w-1/2 px-8 py-6 overflow-auto bg-gray-50">
-              <div className="mb-3">
+            <div className="w-1/2 py-6 overflow-auto bg-gray-50">
+              <div className="mb-3 px-4">
                 <h3 className="text-sm font-semibold text-gray-700 mb-2">Live Preview</h3>
               </div>
-              <div className="border border-gray-200 rounded-lg bg-white p-8 min-h-[300px]">
+              <div className="border border-gray-200 rounded-lg bg-white p-4 min-h-[300px] mx-4">
                 {componentHtml ? (
                   <div 
                     dangerouslySetInnerHTML={{ __html: componentHtml }}
@@ -105,24 +107,26 @@ export function AiChatModal({ isOpen, onClose, component }: AiChatModalProps) {
           </div>
 
           {/* Bottom Section - API Response and HTML Preview */}
-          <div className="h-1/2 px-8 py-6 overflow-auto bg-gray-50">
-            <div className="mb-3">
+          <div className="h-1/2 py-6 overflow-auto bg-gray-50">
+            <div className="mb-3 px-4">
               <h3 className="text-sm font-semibold text-gray-700 mb-2">AI Response</h3>
             </div>
-            <textarea
-              value={apiResponse}
-              readOnly
-              placeholder="AI response will appear here..."
-              className="w-full h-[120px] p-4 border border-gray-300 rounded-lg resize-none bg-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-            />
-            {extractedHtml && (
-              <div className="mt-4">
-                <h4 className="text-xs font-semibold text-gray-600 mb-2">Extracted HTML Preview</h4>
-                <div className="border border-dashed border-blue-400 rounded bg-blue-50 p-4 overflow-auto">
-                  <div dangerouslySetInnerHTML={{ __html: extractedHtml }} />
+            <div className="px-4">
+              <textarea
+                value={apiResponse}
+                readOnly
+                placeholder="AI response will appear here..."
+                className="w-full h-[120px] p-4 border border-gray-300 rounded-lg resize-none bg-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              />
+              {extractedHtml && (
+                <div className="mt-4">
+                  <h4 className="text-xs font-semibold text-gray-600 mb-2">Extracted HTML Preview</h4>
+                  <div className="border border-dashed border-blue-400 rounded bg-blue-50 p-4 overflow-auto">
+                    <div dangerouslySetInnerHTML={{ __html: extractedHtml }} />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 

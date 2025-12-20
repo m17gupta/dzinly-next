@@ -215,7 +215,7 @@ useEffect(()=>{
   const handleUpdateHtml = (html: string) => {
     console.log("update html")
     if (!state.editor) return;
-    console.log("html ---", html)
+    //onsole.log("html ---", html)
     state.editor.setComponents(html);
     setEditorHtml(html);
   };

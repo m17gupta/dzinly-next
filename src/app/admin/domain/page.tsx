@@ -20,6 +20,8 @@ export default function WebsitesPage() {
   const [currentId, setCurrentId] = useState<string | null>(null);
 
   const [name, setName] = useState("");
+  const [adminName, setAdminName] = useState("");
+
   const [serviceType, setServiceType] = useState<
     "WEBSITE_ONLY" | "ECOMMERCE" | "MATERIAL_LIBRARY"
   >("WEBSITE_ONLY");
@@ -143,6 +145,20 @@ export default function WebsitesPage() {
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              placeholder="My Awesome Website"
+              required
+            />
+
+            {/* user Name */}
+          </div>
+             <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700">
+             Admin Name
+            </label>
+            <input
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none"
+              value={name}
+              onChange={(e) => setAdminName(e.target.value)}
               placeholder="My Awesome Website"
               required
             />
